@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpenseFlow - Select Period</title>
+  <meta name="description" content="Select a period to track your expenses">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="period-selection">
+        <h1 class="text-display text-accent mb-2">📅 ExpenseFlow</h1>
+        <p class="text-body text-secondary">Select a period to track your expenses</p>
+        
+        <div class="period-form">
+          <div class="period-input-group input-group">
+            <label for="year-select" class="input-label">
+              📅 Year
+            </label>
+            <select id="year-select" class="input-field"></select>
+          </div>
+          
+          <div class="period-input-group input-group">
+            <label for="month-select" class="input-label">
+              🗓️ Month
+            </label>
+            <select id="month-select" class="input-field"></select>
+          </div>
+        </div>
+        
+        <button id="continue-btn" class="btn btn-primary">
+          Continue to Dashboard ➡️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/period.js"></script>
+  <script>
+    // Initialize period selection
+    document.addEventListener('DOMContentLoaded', function() {
+      buildPeriodSelects();
+      
+      // Load previously selected period if exists
+      const savedPeriod = localStorage.getItem('selected_period');
+      if (savedPeriod) {
+        const {year, month} = parsePeriod(savedPeriod);
+        document.getElementById('year-select').value = year;
+        document.getElementById('month-select').value = month;
+      } else {
+        // Set to current period by default
+        const now = new Date();
+        document.getElementById('year-select').value = now.getFullYear();
+        document.getElementById('month-select').value = now.getMonth() + 1;
+      }
+      
+      // Handle continue button
+      document.getElementById('continue-btn').addEventListener('click', function() {
+        const y = Number(document.getElementById('year-select').value);
+        const m = Number(document.getElementById('month-select').value);
+        const period = toPeriod(y, m);
+        
+        // Save selected period to localStorage
+        localStorage.setItem('selected_period', period);
+        
+        // Redirect to dashboard
+        window.location.href = 'dashboard.html';
+      });
+    });
+  </script>
+</body>
+</html>

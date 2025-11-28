@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpenseFlow - Expense List</title>
+  <meta name="description" content="Detailed expense list view">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div>
+          <h1 class="text-h1">📋 Expense List</h1>
+          <p class="text-body text-secondary mt-2">Detailed view of all expenses for the selected period</p>
+        </div>
+        <div class="flex gap-3">
+          <button id="back-to-dashboard" class="btn btn-secondary">
+            ⬅️ Back to Dashboard
+          </button>
+        </div>
+      </div>
+      
+      <!-- Period Display -->
+      <div class="period-selector mb-6">
+        <div class="flex items-center gap-3">
+          <button id="prev-month-btn" class="btn btn-ghost btn-icon">
+            ⬅️
+          </button>
+          <h2 id="current-period" class="text-h2">📅 January 2023</h2>
+          <button id="next-month-btn" class="btn btn-ghost btn-icon">
+            ➡️
+          </button>
+        </div>
+        <button id="today-btn" class="btn btn-secondary">
+          🏠 Today
+        </button>
+      </div>
+      
+      <!-- Expense List -->
+      <div class="card">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-h2">🧾 All Transactions</h2>
+          <div class="flex gap-2">
+            <button id="clear-month-btn" class="btn btn-danger">
+              🗑️ Clear Month
+            </button>
+          </div>
+        </div>
+        
+        <div id="expense-list" class="expense-list">
+          <div class="empty-state">
+            <div class="empty-state-icon">📉</div>
+            <h3 class="text-h3 mb-2">No transactions yet</h3>
+            <p class="text-body text-secondary">Add your first transaction to get started</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Last Action -->
+      <div class="text-center mt-4">
+        <p id="last-action" class="text-body-sm text-tertiary">👋 Welcome to ExpenseFlow!</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/expenses.js"></script>
+  <script>
+    // Initialize the expenses page
+    document.addEventListener('DOMContentLoaded', function() {
+      initExpenses();
+    });
+  </script>
+</body>
+</html>

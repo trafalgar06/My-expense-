@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpenseFlow - Dashboard</title>
+  <meta name="description" content="Expense tracking dashboard">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div>
+          <h1 class="text-h1">💰 Expense Tracker</h1>
+          <p class="text-body text-secondary mt-2">Manage your spending efficiently</p>
+        </div>
+        <div class="flex gap-3">
+          <button id="back-to-period" class="btn btn-secondary">
+            🔄 Back to Period
+          </button>
+          <button id="export-btn" class="btn btn-ghost">
+            📤 Export CSV
+          </button>
+          <button id="change-period-btn" class="btn btn-secondary">
+            📅 Change Period
+          </button>
+        </div>
+      </div>
+      
+      <!-- Stats Overview -->
+      <div class="stats-grid">
+        <div class="stat-card card">
+          <div class="text-caption text-secondary">Budget</div>
+          <div id="budget-display" class="stat-value">₹ 0.00</div>
+          <div class="text-caption text-tertiary">Total budget</div>
+        </div>
+        
+        <div class="stat-card card">
+          <div class="text-caption text-secondary">Spent</div>
+          <div id="spent-display" class="stat-value text-danger">₹ 0.00</div>
+          <div class="text-caption text-tertiary">This period</div>
+        </div>
+        
+        <div class="stat-card card">
+          <div class="text-caption text-secondary">Remaining</div>
+          <div id="remaining-display" class="stat-value text-success">₹ 0.00</div>
+          <div class="text-caption text-tertiary">Available</div>
+        </div>
+      </div>
+      
+      <!-- Budget & Add Expense Forms -->
+      <div class="grid grid-cols-2 gap-6 mb-6">
+        <!-- Budget Section -->
+        <div class="card">
+          <h2 class="text-h2 mb-4">💳 Budget</h2>
+          
+          <div class="input-group mb-4">
+            <label for="budget-input" class="input-label">Set Budget 💰</label>
+            <input type="number" id="budget-input" class="input-field" placeholder="Enter budget amount">
+            <p class="text-caption text-tertiary mt-2">Leave empty to keep current budget</p>
+          </div>
+          
+          <button id="add-money-btn" class="btn btn-secondary w-full">
+            ➕ Add Money to Budget
+          </button>
+        </div>
+        
+        <!-- Add Expense Section -->
+        <div class="card">
+          <h2 class="text-h2 mb-4">🛒 Add Expense</h2>
+          
+          <button id="add-expense-btn" class="btn btn-secondary w-full">
+            ➕ Add New Expense
+          </button>
+        </div>
+      </div>
+      
+      <!-- Period Navigation -->
+      <div class="period-selector">
+        <div class="flex items-center gap-3">
+          <button id="prev-month-btn" class="btn btn-ghost btn-icon">
+            ⬅️
+          </button>
+          <h2 id="current-period" class="text-h2">📅 January 2023</h2>
+          <button id="next-month-btn" class="btn btn-ghost btn-icon">
+            ➡️
+          </button>
+        </div>
+        <button id="today-btn" class="btn btn-secondary">
+          🏠 Today
+        </button>
+      </div>
+      
+      <!-- Expense List Preview -->
+      <div class="card">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-h2">📊 Recent Expenses</h2>
+          <button id="view-all-expenses" class="btn btn-secondary">
+            👀 View All Expenses
+          </button>
+        </div>
+        
+        <div id="expense-list-preview" class="expense-list">
+          <div class="empty-state">
+            <div class="empty-state-icon">📉</div>
+            <h3 class="text-h3 mb-2">No expenses yet</h3>
+            <p class="text-body text-secondary">Add your first expense to get started</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Last Action -->
+      <div class="text-center mt-4">
+        <p id="last-action" class="text-body-sm text-tertiary">👋 Welcome to ExpenseFlow!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Money Modal -->
+  <div id="add-money-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="text-h2">💰 Add Money to Budget</h2>
+        <button id="close-add-money" class="modal-close">&times;</button>
+      </div>
+      
+      <div class="input-group mb-4">
+        <label for="add-money-source" class="input-label">Source of Money 📍</label>
+        <input type="text" id="add-money-source" class="input-field" placeholder="Where did you get this money?">
+      </div>
+      
+      <div class="input-group mb-4">
+        <label for="add-money-amount" class="input-label">Amount to Add 💵</label>
+        <input type="number" id="add-money-amount" class="input-field" placeholder="Enter amount to add to budget">
+      </div>
+      
+      <button id="submit-add-money" class="btn btn-primary w-full">
+        ➕ Add to Budget
+      </button>
+    </div>
+  </div>
+
+  <!-- Add Expense Modal -->
+  <div id="add-expense-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="text-h2">🛒 Add New Expense</h2>
+        <button id="close-add-expense" class="modal-close">&times;</button>
+      </div>
+      
+      <div class="input-group mb-4">
+        <label for="expense-name" class="input-label">Item Name 🛒</label>
+        <input type="text" id="expense-name" class="input-field" placeholder="What did you spend on?">
+      </div>
+      
+      <div class="input-group mb-4">
+        <label for="expense-amount" class="input-label">Amount 💰</label>
+        <input type="number" id="expense-amount" class="input-field" placeholder="How much?">
+      </div>
+      
+      <button id="submit-add-expense" class="btn btn-primary w-full">
+        ➕ Add Expense
+      </button>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    // Initialize the dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      initDashboard();
+    });
+  </script>
+</body>
+</html>
