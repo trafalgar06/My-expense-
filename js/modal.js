@@ -1,22 +1,24 @@
-// ===== Modal Functions =====
-function openAddMoneyModal() {
-  document.getElementById('add-money-modal').style.display = 'flex';
-  document.getElementById('add-money-source').focus();
+// ========== Modal Functions ==========
+function openMoneyModal() {
+  document.getElementById("add-money-modal").style.display = "flex";
+}
+function closeMoneyModal() {
+  document.getElementById("add-money-modal").style.display = "none";
 }
 
-function closeAddMoneyModal() {
-  document.getElementById('add-money-modal').style.display = 'none';
-  document.getElementById('add-money-source').value = '';
-  document.getElementById('add-money-amount').value = '';
+function openExpenseModal() {
+  document.getElementById("add-expense-modal").style.display = "flex";
+}
+function closeExpenseModal() {
+  document.getElementById("add-expense-modal").style.display = "none";
 }
 
-function openAddExpenseModal() {
-  document.getElementById('add-expense-modal').style.display = 'flex';
-  document.getElementById('expense-name').focus();
+function closeEditExpenseModal() {
+  const modal = document.getElementById("edit-expense-modal");
+  if (modal) modal.style.display = "none";
 }
 
-function closeAddExpenseModal() {
-  document.getElementById('add-expense-modal').style.display = 'none';
-  document.getElementById('expense-name').value = '';
-  document.getElementById('expense-amount').value = '';
+function closeEditIncomeModal() {
+  const modal = document.getElementById("edit-income-modal");
+  if (modal) modal.style.display = "none";
 }

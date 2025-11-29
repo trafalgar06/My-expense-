@@ -1,8 +1,28 @@
-// ===== Storage Functions =====
-let store = {};
-let currentPeriod = '';
-let lastDeleted = null;
+// ========== Unified Global Storage ==========
+const STORAGE_KEY = "exp_tracker_v2";
 
-function loadStore(){ try{ const raw = localStorage.getItem(STORAGE_KEY); store = raw ? JSON.parse(raw) : {}; }catch(e){ store={}; } }
-function saveStore(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
-function ensurePeriod(p){ if(!store[p]) store[p] = { budget:0, added:0, expenses:[], income:[] }; }
+if (!window.store) window.store = {};
+
+function loadStore() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    window.store = raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    window.store = {};
+  }
+}
+
+function saveStore() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(window.store));
+}
+
+function ensurePeriod(p) {
+  if (!window.store[p]) {
+    window.store[p] = {
+      budget: 0,
+      added: 0,
+      expenses: [],
+      income: []
+    };
+  }
+}

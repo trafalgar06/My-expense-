@@ -8,38 +8,41 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <div class="card">
+      <div style="text-align: right; margin-bottom: 1rem;">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+          <span class="theme-icon sun"></span>
+          <span class="theme-icon moon"></span>
+        </button>
+      </div>
       <div class="period-selection">
-        <h1 class="text-display text-accent mb-2">📅 ExpenseFlow</h1>
+        <h1 class="text-display text-accent mb-2">ExpenseFlow</h1>
         <p class="text-body text-secondary">Select a period to track your expenses</p>
         
         <div class="period-form">
           <div class="period-input-group input-group">
-            <label for="year-select" class="input-label">
-              📅 Year
-            </label>
+            <label for="year-select" class="input-label">Year</label>
             <select id="year-select" class="input-field"></select>
           </div>
           
           <div class="period-input-group input-group">
-            <label for="month-select" class="input-label">
-              🗓️ Month
-            </label>
+            <label for="month-select" class="input-label">Month</label>
             <select id="month-select" class="input-field"></select>
           </div>
         </div>
         
         <button id="continue-btn" class="btn btn-primary">
-          Continue to Dashboard ➡️
+          Continue to Dashboard
         </button>
       </div>
     </div>
   </div>
 
+  <script src="js/theme.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/period.js"></script>

@@ -8,20 +8,27 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <div class="card">
+      <div style="text-align: right; margin-bottom: 1rem;">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+          <span class="theme-icon sun"></span>
+          <span class="theme-icon moon"></span>
+        </button>
+      </div>
       <div class="text-center">
-        <h1 class="text-display text-accent mb-4">💰 ExpenseFlow</h1>
+        <h1 class="text-display text-accent mb-4">ExpenseFlow</h1>
         <p class="text-body text-secondary mb-6">A modern expense tracking application</p>
-        <p class="text-body mb-6">🔄 Redirecting to the period selection page...</p>
+        <p class="text-body mb-6">Redirecting to the period selection page...</p>
         <div class="loading-spinner"></div>
       </div>
     </div>
   </div>
 
+  <script src="js/theme.js"></script>
   <script>
     // Redirect to period selection page
     setTimeout(function() {

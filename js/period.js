@@ -1,26 +1,32 @@
-// ===== Period Selection Functions =====
-function buildPeriodSelects(){
-  const now=new Date();
-  const yNow=now.getFullYear();
-  let years=[];
-  for(let y=yNow-5;y<=yNow+2;y++) years.push(y);
-  document.getElementById('year-select').innerHTML = years.map(y=>`<option value="${y}">${y}</option>`).join('');
-  document.getElementById('month-select').innerHTML = MONTH_NAMES.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('');
-}
+// ========== Period Selection ==========
+document.addEventListener("DOMContentLoaded", () => {
 
-function syncSelectToCurrent(){ 
-  const {year, month} = parsePeriod(currentPeriod); 
-  document.getElementById('year-select').value = year; 
-  document.getElementById('month-select').value = month; 
-}
+  const yearSel = document.getElementById("year-select");
+  const monthSel = document.getElementById("month-select");
 
-// navigation
-function showTracker(){
-  document.getElementById('period-screen').classList.add('hidden');
-  document.getElementById('tracker-screen').classList.remove('hidden');
-}
+  const now = new Date();
 
-function showPeriodSelector(){
-  document.getElementById('tracker-screen').classList.add('hidden');
-  document.getElementById('period-screen').classList.remove('hidden');
-}
+  for (let y = now.getFullYear() - 5; y <= now.getFullYear() + 3; y++) {
+    yearSel.innerHTML += `<option value="${y}">${y}</option>`;
+  }
+
+  MONTH_NAMES.forEach((m, i) => {
+    monthSel.innerHTML += `<option value="${i + 1}">${m}</option>`;
+  });
+
+  const saved = localStorage.getItem("selected_period");
+  if (saved) {
+    const { year, month } = parsePeriod(saved);
+    yearSel.value = year;
+    monthSel.value = month;
+  } else {
+    yearSel.value = now.getFullYear();
+    monthSel.value = now.getMonth() + 1;
+  }
+
+  document.getElementById("continue-btn").onclick = () => {
+    const p = toPeriod(Number(yearSel.value), Number(monthSel.value));
+    localStorage.setItem("selected_period", p);
+    window.location.href = "dashboard.html";
+  };
+});
