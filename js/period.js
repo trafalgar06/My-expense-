@@ -14,7 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
     monthSel.innerHTML += `<option value="${i + 1}">${m}</option>`;
   });
 
-  const saved = localStorage.getItem("selected_period");
+  // Use page-specific key for period selection
+  const page = 'period_selection';
+  const key = `period_${page}`;
+  const saved = localStorage.getItem(key);
   if (saved) {
     const { year, month } = parsePeriod(saved);
     yearSel.value = year;
@@ -24,9 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
     monthSel.value = now.getMonth() + 1;
   }
 
-  document.getElementById("continue-btn").onclick = () => {
-    const p = toPeriod(Number(yearSel.value), Number(monthSel.value));
-    localStorage.setItem("selected_period", p);
-    window.location.href = "dashboard.html";
-  };
+  const continueBtn = document.getElementById("continue-btn");
+  if (continueBtn) {
+    continueBtn.addEventListener("click", () => {
+      const p = toPeriod(Number(yearSel.value), Number(monthSel.value));
+      localStorage.setItem(key, p);
+      window.location.href = "dashboard.html";
+    });
+  }
 });

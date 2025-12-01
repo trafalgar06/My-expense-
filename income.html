@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DenaroTrack - Income</title>
+  <meta name="description" content="Manage your income sources">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="has-sidebar">
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+
+  <div class="container">
+    <div class="dashboard-grid">
+      <!-- Top area with greeting and buttons -->
+      <div class="top-area">
+        <div>
+          <h1 class="greeting">💰 Income</h1>
+          <p class="text-body text-secondary mt-2">Track and manage your income sources</p>
+        </div>
+      </div>
+      
+      <!-- Coming Soon Content -->
+      <div class="card card-span-12">
+        <div class="empty-state" style="padding: var(--space-16) var(--space-8);">
+          <div class="empty-state-icon" style="font-size: 4rem;">💰</div>
+          <h2 class="text-h2 mb-3">Income Management</h2>
+          <p class="text-body text-secondary mb-6">This feature is under development</p>
+          <div class="alert alert-info">
+            <strong>ℹ️ Coming Soon:</strong> You'll be able to view and manage all your income sources here. For now, you can add income from the Dashboard.
+          </div>
+          <a href="dashboard.html" class="btn btn-primary mt-6">
+            Go to Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/sidebar.js"></script>
+  <script>
+    // No additional initialization needed - sidebar.js handles everything
+  </script>
+</body>
+</html>

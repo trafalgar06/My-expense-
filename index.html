@@ -12,18 +12,25 @@
 </head>
 <body>
   <div class="container">
-    <div class="card">
-      <div style="text-align: right; margin-bottom: 1rem;">
-        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-          <span class="theme-icon sun"></span>
-          <span class="theme-icon moon"></span>
-        </button>
+    <div class="dashboard-grid">
+      <!-- Top area with greeting and buttons -->
+      <div class="top-area">
+        <div></div>
+        <div style="text-align: right;">
+          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            <span class="theme-icon sun"></span>
+            <span class="theme-icon moon"></span>
+          </button>
+        </div>
       </div>
-      <div class="text-center">
-        <h1 class="text-display text-accent mb-4">ExpenseFlow</h1>
-        <p class="text-body text-secondary mb-6">A modern expense tracking application</p>
-        <p class="text-body mb-6">Redirecting to the period selection page...</p>
-        <div class="loading-spinner"></div>
+      
+      <div class="card card-span-12">
+        <div class="text-center">
+          <h1 class="text-display text-accent mb-4">ExpenseFlow</h1>
+          <p class="text-body text-secondary mb-6">A modern expense tracking application</p>
+          <p class="text-body mb-6">Redirecting to the period selection page...</p>
+          <div class="loading-spinner"></div>
+        </div>
       </div>
     </div>
   </div>

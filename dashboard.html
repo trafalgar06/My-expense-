@@ -11,16 +11,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
-<body>
+<body class="has-sidebar">
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+  
   <div class="container">
-    <div class="card">
-      <div class="header">
+    <div class="dashboard-grid">
+      <!-- Top area with greeting and buttons -->
+      <div class="top-area">
         <div>
-          <h1 class="text-h1">Expense Tracker</h1>
+          <h1 class="greeting">Good morning, User</h1>
           <p class="text-body text-secondary mt-2">Manage your spending efficiently</p>
         </div>
 
-        <div class="flex gap-3">
+        <div class="button-group">
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
             <span class="theme-icon sun"></span>
             <span class="theme-icon moon"></span>
@@ -34,60 +38,68 @@
         </div>
       </div>
       
-      <!-- Stats Overview -->
-      <div class="stats-grid">
-        <div class="stat-card card">
-          <div class="text-caption text-secondary">Budget</div>
-          <div id="budget-display" class="stat-value">₹ 0.00</div>
-          <div class="text-caption text-tertiary">Total budget</div>
+      <!-- Cards section -->
+      <div class="cards-section">
+        <!-- Income card with mini line chart -->
+        <div class="income-card dashboard-card card">
+          <h2 class="text-h2 mb-4">Income</h2>
+          <div class="text-caption text-secondary mb-3">Total income this period</div>
+          <div id="budget-display" class="stat-value text-success">₹ 0.00</div>
+          <div class="chart-placeholder mt-4" style="height: 80px; background: var(--bg-secondary); border-radius: var(--radius-lg);"></div>
         </div>
         
-        <div class="stat-card card">
-          <div class="text-caption text-secondary">Spent</div>
+        <!-- Overview card with donut chart -->
+        <div class="overview-card dashboard-card card">
+          <h2 class="text-h2 mb-4">Overview</h2>
+          <div class="text-caption text-secondary mb-3">Spending vs Budget</div>
           <div id="spent-display" class="stat-value text-danger">₹ 0.00</div>
-          <div class="text-caption text-tertiary">This period</div>
+          <div class="chart-placeholder mt-4" style="height: 80px; background: var(--bg-secondary); border-radius: var(--radius-lg);"></div>
         </div>
         
-        <div class="stat-card card">
-          <div class="text-caption text-secondary">Remaining</div>
-          <div id="remaining-display" class="stat-value text-success">₹ 0.00</div>
-          <div class="text-caption text-tertiary">Available</div>
+        <!-- Expense strategy card with bar chart -->
+        <div class="strategy-card dashboard-card card">
+          <h2 class="text-h2 mb-4">Strategy</h2>
+          <div class="text-caption text-secondary mb-3">Remaining budget</div>
+          <div id="remaining-display" class="stat-value text-accent">₹ 0.00</div>
+          <div class="chart-placeholder mt-4" style="height: 80px; background: var(--bg-secondary); border-radius: var(--radius-lg);"></div>
         </div>
-      </div>
-      
-      <!-- Budget & Add Expense Forms -->
-      <div class="grid grid-cols-2 gap-6 mb-6">
-        <!-- Budget Section -->
-        <div class="card">
-          <h2 class="text-h2 mb-4">Budget</h2>
-          
-          <div class="input-group mb-4">
-            <label for="budget-input" class="input-label">Set Budget</label>
-            <input type="number" id="budget-input" class="input-field" placeholder="Enter budget amount">
-            <p class="text-caption text-tertiary mt-2">This sets your main monthly budget</p>
+        
+        <!-- Set Budget card -->
+        <div class="money-flow-card dashboard-card card">
+          <h2 class="text-h2 mb-4">Set Budget</h2>
+          <div class="text-caption text-secondary mb-3">Define your monthly budget</div>
+          <div class="budget-input-container mt-4">
+            <div class="input-group">
+              <label for="budget-input" class="input-label">Monthly Budget</label>
+              <div class="input-with-symbol">
+                <span class="currency-symbol">₹</span>
+                <input type="number" id="budget-input" class="input-field" placeholder="Enter your budget">
+              </div>
+            </div>
+            <button id="set-budget-btn" class="btn btn-primary w-full mt-4">
+              Set Budget
+            </button>
           </div>
-          
-          <button id="set-budget-btn" class="btn btn-primary w-full mb-3">
-            Set Main Budget
-          </button>
-          
-          <button id="add-money-btn" class="btn btn-secondary w-full">
-            Add Extra Income
-          </button>
         </div>
         
-        <!-- Add Expense Section -->
-        <div class="card">
-          <h2 class="text-h2 mb-4">Add Expense</h2>
-          
-          <button id="add-expense-btn" class="btn btn-secondary w-full">
-            Add New Expense
-          </button>
+        <!-- My Finances card (account-style card) -->
+        <div class="finances-card dashboard-card card">
+          <h2 class="text-h2 mb-4">My Finances</h2>
+          <div class="text-caption text-secondary mb-3">Account balance</div>
+          <div class="stat-value text-primary">₹ 0.00</div>
+          <div class="mt-4">
+            <button id="add-money-btn" class="btn btn-secondary w-full">
+              Add Income
+            </button>
+            <button id="add-expense-btn" class="btn btn-primary w-full mt-3">
+              Add Expense
+            </button>
+          </div>
         </div>
       </div>
       
       <!-- Period Navigation -->
-      <div class="period-selector">
+      <div class="period-selector card card-span-12">
         <div class="flex items-center gap-3">
           <button id="prev-month-btn" class="btn btn-ghost btn-icon">
             ←
@@ -103,75 +115,25 @@
       </div>
       
       <!-- Recent Expenses -->
-      <div class="card">
+      <div class="card card-span-12">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-h2">Recent Expenses</h2>
+          <h2 class="text-h2">Recent Transactions</h2>
           <button id="view-all-expenses" class="btn btn-secondary">
-            View All Expenses
+            View All
           </button>
         </div>
         
         <div id="expense-list-preview" class="expense-list">
           <div class="empty-state">
             <div class="empty-state-icon">📊</div>
-            <h3 class="text-h3 mb-2">No expenses yet</h3>
-            <p class="text-body text-secondary">Add your first expense to get started</p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Monthly Summary -->
-      <div class="card">
-        <h2 class="text-h2 mb-4">Monthly Summary</h2>
-        <div class="summary-grid">
-          <div class="summary-card">
-            <div class="summary-label">Total Income</div>
-            <div id="summary-income" class="summary-value text-success">₹ 0.00</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Total Expenses</div>
-            <div id="summary-expenses" class="summary-value text-danger">₹ 0.00</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Total Savings</div>
-            <div id="summary-savings" class="summary-value text-accent">₹ 0.00</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Biggest Expense</div>
-            <div id="summary-biggest" class="summary-value">₹ 0.00</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Total Transactions</div>
-            <div id="summary-count" class="summary-value">0</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Top Category</div>
-            <div id="summary-category" class="summary-value text-body-sm">None</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Charts Section -->
-      <div class="card charts-section">
-        <h2 class="text-h2 mb-6">Financial Analytics</h2>
-        <div class="charts-grid">
-          <div class="chart-container">
-            <h3 class="text-h3 mb-4 text-center">Spending by Category</h3>
-            <canvas id="categoryChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3 class="text-h3 mb-4 text-center">Last 6 Months Spending</h3>
-            <canvas id="spendingTrendChart"></canvas>
-          </div>
-          <div class="chart-container chart-full">
-            <h3 class="text-h3 mb-4 text-center">Savings Trend (Last 6 Months)</h3>
-            <canvas id="savingsTrendChart"></canvas>
+            <h3 class="text-h3 mb-2">No transactions yet</h3>
+            <p class="text-body text-secondary">Add your first transaction to get started</p>
           </div>
         </div>
       </div>
       
       <!-- Last Action -->
-      <div class="text-center mt-4">
+      <div class="text-center mt-4 card card-span-12">
         <p id="last-action" class="text-body-sm text-tertiary">Welcome to ExpenseFlow!</p>
       </div>
     </div>
@@ -215,6 +177,20 @@
       </div>
       
       <div class="input-group mb-4">
+        <label for="expense-category" class="input-label">Category</label>
+        <select id="expense-category" class="input-field">
+          <option value="Food">🍔 Food</option>
+          <option value="Transport">🚗 Transport</option>
+          <option value="Shopping">🛍️ Shopping</option>
+          <option value="Entertainment">🎬 Entertainment</option>
+          <option value="Healthcare">🏥 Healthcare</option>
+          <option value="Education">📚 Education</option>
+          <option value="Bills">📄 Bills</option>
+          <option value="Other">📦 Other</option>
+        </select>
+      </div>
+      
+      <div class="input-group mb-4">
         <label for="expense-amount" class="input-label">Amount</label>
         <input type="number" id="expense-amount" class="input-field" placeholder="How much?">
       </div>
@@ -236,6 +212,20 @@
       <div class="input-group mb-4">
         <label for="edit-expense-name" class="input-label">Item Name</label>
         <input type="text" id="edit-expense-name" class="input-field" placeholder="What did you spend on?">
+      </div>
+      
+      <div class="input-group mb-4">
+        <label for="edit-expense-category" class="input-label">Category</label>
+        <select id="edit-expense-category" class="input-field">
+          <option value="Food">🍔 Food</option>
+          <option value="Transport">🚗 Transport</option>
+          <option value="Shopping">🛍️ Shopping</option>
+          <option value="Entertainment">🎬 Entertainment</option>
+          <option value="Healthcare">🏥 Healthcare</option>
+          <option value="Education">📚 Education</option>
+          <option value="Bills">📄 Bills</option>
+          <option value="Other">📦 Other</option>
+        </select>
       </div>
       
       <div class="input-group mb-4">
@@ -277,13 +267,12 @@
   <script src="js/theme.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/sidebar.js"></script>
   <script src="js/modal.js"></script>
   <script src="js/dashboard.js"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      initDashboard();
-    });
+    // Dashboard initialization handled by dashboard.js
   </script>
 </body>
 </html>

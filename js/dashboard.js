@@ -4,63 +4,124 @@ let chartInstances = {};
 let editingExpenseIndex = null;
 let editingIncomeIndex = null;
 
+// ========== Greeting Function ==========
+function getGreeting() {
+  const hour = new Date().getHours();
+  
+  if (hour >= 5 && hour < 12) {
+    return "Good Morning";
+  } else if (hour >= 12 && hour < 17) {
+    return "Good Afternoon";
+  } else if (hour >= 17 && hour < 21) {
+    return "Good Evening";
+  } else {
+    return "Good Night";
+  }
+}
+
+function updateGreeting() {
+  const greetingElement = document.querySelector('.greeting');
+  if (greetingElement) {
+    greetingElement.textContent = `${getGreeting()}, User`;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   loadStore();
 
-  currentPeriod =
-    localStorage.getItem("selected_period") ||
-    toPeriod(new Date().getFullYear(), new Date().getMonth() + 1);
+  // Initialize period using consistent utility function
+  currentPeriod = initPeriod();
 
   ensurePeriod(currentPeriod);
   bindEvents();
   renderDashboard();
+  
+  // Update greeting immediately and then every minute
+  updateGreeting();
+  setInterval(updateGreeting, 60000); // Update every minute
 });
 
 function bindEvents() {
-  document.getElementById("change-period-btn").onclick = () => {
-    window.location.href = "period-selection.html";
-  };
+  const changePeriodBtn = document.getElementById("change-period-btn");
+  if (changePeriodBtn) {
+    changePeriodBtn.addEventListener("click", () => {
+      window.location.href = "period-selection.html";
+    });
+  }
 
-  document.getElementById("export-btn").onclick = exportToCSV;
-  document.getElementById("set-budget-btn").onclick = setMainBudget;
-  document.getElementById("add-money-btn").onclick = openMoneyModal;
-  document.getElementById("add-expense-btn").onclick = openExpenseModal;
+  const exportBtn = document.getElementById("export-btn");
+  if (exportBtn) exportBtn.addEventListener("click", exportToCSV);
+  
+  const setBudgetBtn = document.getElementById("set-budget-btn");
+  if (setBudgetBtn) setBudgetBtn.addEventListener("click", setMainBudget);
+  
+  const addMoneyBtn = document.getElementById("add-money-btn");
+  if (addMoneyBtn) addMoneyBtn.addEventListener("click", openMoneyModal);
+  
+  const addExpenseBtn = document.getElementById("add-expense-btn");
+  if (addExpenseBtn) addExpenseBtn.addEventListener("click", openExpenseModal);
 
-  document.getElementById("close-add-money").onclick = closeMoneyModal;
-  document.getElementById("close-add-expense").onclick = closeExpenseModal;
-  document.getElementById("close-edit-expense").onclick = closeEditExpenseModal;
-  document.getElementById("close-edit-income").onclick = closeEditIncomeModal;
+  const closeAddMoneyBtn = document.getElementById("close-add-money");
+  if (closeAddMoneyBtn) closeAddMoneyBtn.addEventListener("click", closeMoneyModal);
+  
+  const closeAddExpenseBtn = document.getElementById("close-add-expense");
+  if (closeAddExpenseBtn) closeAddExpenseBtn.addEventListener("click", closeExpenseModal);
+  
+  const closeEditExpenseBtn = document.getElementById("close-edit-expense");
+  if (closeEditExpenseBtn) closeEditExpenseBtn.addEventListener("click", closeEditExpenseModal);
+  
+  const closeEditIncomeBtn = document.getElementById("close-edit-income");
+  if (closeEditIncomeBtn) closeEditIncomeBtn.addEventListener("click", closeEditIncomeModal);
 
-  document.getElementById("submit-add-money").onclick = addExtraIncome;
-  document.getElementById("submit-add-expense").onclick = addExpense;
-  document.getElementById("submit-edit-expense").onclick = updateExpense;
-  document.getElementById("submit-edit-income").onclick = updateIncome;
+  const submitAddMoneyBtn = document.getElementById("submit-add-money");
+  if (submitAddMoneyBtn) submitAddMoneyBtn.addEventListener("click", addExtraIncome);
+  
+  const submitAddExpenseBtn = document.getElementById("submit-add-expense");
+  if (submitAddExpenseBtn) submitAddExpenseBtn.addEventListener("click", addExpense);
+  
+  const submitEditExpenseBtn = document.getElementById("submit-edit-expense");
+  if (submitEditExpenseBtn) submitEditExpenseBtn.addEventListener("click", updateExpense);
+  
+  const submitEditIncomeBtn = document.getElementById("submit-edit-income");
+  if (submitEditIncomeBtn) submitEditIncomeBtn.addEventListener("click", updateIncome);
 
-  document.getElementById("prev-month-btn").onclick = () => shiftMonth(-1);
-  document.getElementById("next-month-btn").onclick = () => shiftMonth(1);
+  const prevMonthBtn = document.getElementById("prev-month-btn");
+  if (prevMonthBtn) prevMonthBtn.addEventListener("click", () => shiftMonth(-1));
+  
+  const nextMonthBtn = document.getElementById("next-month-btn");
+  if (nextMonthBtn) nextMonthBtn.addEventListener("click", () => shiftMonth(1));
 
-  document.getElementById("today-btn").onclick = () => {
-    const now = new Date();
-    currentPeriod = toPeriod(now.getFullYear(), now.getMonth() + 1);
-    ensurePeriod(currentPeriod);
-    renderDashboard();
-  };
+  const todayBtn = document.getElementById("today-btn");
+  if (todayBtn) {
+    todayBtn.addEventListener("click", () => {
+      const now = new Date();
+      currentPeriod = toPeriod(now.getFullYear(), now.getMonth() + 1);
+      ensurePeriod(currentPeriod);
+      renderDashboard();
+    });
+  }
 
-  document.getElementById("view-all-expenses").onclick = () => {
-    window.location.href = "expenses.html";
-  };
+  const viewAllExpensesBtn = document.getElementById("view-all-expenses");
+  if (viewAllExpensesBtn) {
+    viewAllExpensesBtn.addEventListener("click", () => {
+      window.location.href = "expenses.html";
+    });
+  }
   
   // Add Enter key support for budget input
-  document.getElementById("budget-input").addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      setMainBudget();
-    }
-  });
+  const budgetInput = document.getElementById("budget-input");
+  if (budgetInput) {
+    budgetInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        setMainBudget();
+      }
+    });
+  }
 }
 
 function renderDashboard() {
   ensurePeriod(currentPeriod);
-  const p = store[currentPeriod];
+  const p = getPeriodData(currentPeriod);
 
   const spent = p.expenses.reduce((sum, e) => sum + e.amount, 0);
 
@@ -70,6 +131,9 @@ function renderDashboard() {
     fmt(p.budget + p.added - spent);
 
   document.getElementById("current-period").textContent = periodDisplay(currentPeriod);
+  
+  // Update greeting based on time of day
+  updateGreeting();
 
   const list = document.getElementById("expense-list-preview");
   list.innerHTML = "";
@@ -114,14 +178,14 @@ function setMainBudget() {
     return;
   }
   
-  const p = store[currentPeriod];
+  const p = getPeriodData(currentPeriod);
   p.budget = budgetAmount;
   
   budgetInput.value = "";
   saveStore();
   renderDashboard();
   
-  document.getElementById("last-action").textContent = `Main budget set to ₹${fmt(budgetAmount)}`;
+  document.getElementById("last-action").textContent = `Main budget set to ${fmt(budgetAmount)}`;
 }
 
 function addExtraIncome() {
@@ -138,9 +202,16 @@ function addExtraIncome() {
     return;
   }
 
-  const p = store[currentPeriod];
+  const p = getPeriodData(currentPeriod);
 
-  p.income.push({ source: src, amount: amt, timestamp: Date.now() });
+  p.income.push({ 
+    id: crypto.randomUUID(),
+    source: src, 
+    amount: amt, 
+    category: "Income",
+    date: new Date().toISOString().split('T')[0],
+    timestamp: Date.now() 
+  });
   p.added += amt;
 
   document.getElementById("add-money-source").value = "";
@@ -150,11 +221,12 @@ function addExtraIncome() {
   saveStore();
   renderDashboard();
   
-  document.getElementById("last-action").textContent = `Added extra income: ₹${fmt(amt)} from ${src}`;
+  document.getElementById("last-action").textContent = `Added extra income: ${fmt(amt)} from ${src}`;
 }
 
 function addExpense() {
   const name = document.getElementById("expense-name").value.trim();
+  const category = document.getElementById("expense-category").value;
   const amt = Number(document.getElementById("expense-amount").value);
 
   if (!name) {
@@ -167,53 +239,62 @@ function addExpense() {
     return;
   }
 
-  store[currentPeriod].expenses.push({
+  getPeriodData(currentPeriod).expenses.push({
+    id: crypto.randomUUID(),
     name,
     amount: amt,
+    category: category || "Other",
+    date: new Date().toISOString().split('T')[0],
     timestamp: Date.now()
   });
 
   document.getElementById("expense-name").value = "";
+  document.getElementById("expense-category").value = "Food";
   document.getElementById("expense-amount").value = "";
   
   closeExpenseModal();
   saveStore();
   renderDashboard();
+  renderMonthlySummary();
+  renderCharts();
   
-  document.getElementById("last-action").textContent = `Added expense: ${name} ₹${fmt(amt)}`;
+  document.getElementById("last-action").textContent = `Added expense: ${name} ${fmt(amt)}`;
 }
 
 function shiftMonth(delta) {
-  const { year, month } = parsePeriod(currentPeriod);
-  const d = new Date(year, month - 1 + delta, 1);
-  currentPeriod = toPeriod(d.getFullYear(), d.getMonth() + 1);
-
+  // Use consistent period navigation utility function
+  currentPeriod = navigatePeriod(currentPeriod, delta);
+  
   ensurePeriod(currentPeriod);
   renderDashboard();
+  renderMonthlySummary();
+  renderCharts();
 }
 
 function exportToCSV() {
-  const p = store[currentPeriod];
+  const p = getPeriodData(currentPeriod);
   if (!p || (p.expenses.length === 0 && p.income.length === 0)) {
     alert("No data to export for this period");
     return;
   }
 
   // Prepare CSV data
-  let csv = "Date,Type,Description,Amount\n";
+  let csv = "Date,Type,Description,Category,Amount\n";
   
   // Add income entries
   p.income.forEach(item => {
     const date = new Date(item.timestamp).toLocaleString();
     const description = item.source.replace(/,/g, ';'); // Escape commas
-    csv += `"${date}","Income","${description}",${item.amount}\n`;
+    const category = (item.category || "Income").replace(/,/g, ';');
+    csv += `"${date}","Income","${description}","${category}",${item.amount}\n`;
   });
   
   // Add expense entries
   p.expenses.forEach(item => {
     const date = new Date(item.timestamp).toLocaleString();
     const description = item.name.replace(/,/g, ';'); // Escape commas
-    csv += `"${date}","Expense","${description}",${item.amount}\n`;
+    const category = (item.category || "Other").replace(/,/g, ';');
+    csv += `"${date}","Expense","${description}","${category}",${item.amount}\n`;
   });
   
   // Add summary
@@ -222,11 +303,11 @@ function exportToCSV() {
   const remaining = totalIncome - totalExpenses;
   
   csv += "\n";
-  csv += `"Summary","Budget","${periodDisplay(currentPeriod)}",${p.budget}\n`;
-  csv += `"Summary","Extra Income","${periodDisplay(currentPeriod)}",${p.added}\n`;
-  csv += `"Summary","Total Budget","${periodDisplay(currentPeriod)}",${totalIncome}\n`;
-  csv += `"Summary","Total Expenses","${periodDisplay(currentPeriod)}",${totalExpenses}\n`;
-  csv += `"Summary","Remaining","${periodDisplay(currentPeriod)}",${remaining}\n`;
+  csv += `"Summary","Budget","${periodDisplay(currentPeriod)}","",${p.budget}\n`;
+  csv += `"Summary","Extra Income","${periodDisplay(currentPeriod)}","",${p.added}\n`;
+  csv += `"Summary","Total Budget","${periodDisplay(currentPeriod)}","",${totalIncome}\n`;
+  csv += `"Summary","Total Expenses","${periodDisplay(currentPeriod)}","",${totalExpenses}\n`;
+  csv += `"Summary","Remaining","${periodDisplay(currentPeriod)}","",${remaining}\n`;
   
   // Create download link
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -234,7 +315,7 @@ function exportToCSV() {
   const url = URL.createObjectURL(blob);
   
   link.setAttribute('href', url);
-  link.setAttribute('download', `ExpenseFlow_${currentPeriod}.csv`);
+  link.setAttribute('download', `DenaroTrack_${currentPeriod}.csv`);
   link.style.visibility = 'hidden';
   
   document.body.appendChild(link);
@@ -245,8 +326,8 @@ function exportToCSV() {
 }
 
 // ========== Monthly Summary ==========
-function renderMonthlySummary() {
-  const p = store[currentPeriod];
+function renderMonthlySummary(period = currentPeriod) {
+  const p = getPeriodData(period);
   
   // Calculate total income
   const totalIncome = p.income.reduce((sum, i) => sum + i.amount, 0) + p.budget;
@@ -265,12 +346,12 @@ function renderMonthlySummary() {
   // Count total transactions
   const totalCount = p.income.length + p.expenses.length;
   
-  // Find top category (using expense names as categories)
+  // Find top category (using actual categories now)
   let topCategory = "None";
   if (p.expenses.length > 0) {
     const categoryCount = {};
     p.expenses.forEach(e => {
-      const category = e.name || "Other";
+      const category = e.category || "Other";
       categoryCount[category] = (categoryCount[category] || 0) + 1;
     });
     const maxCategory = Object.entries(categoryCount).reduce((a, b) => a[1] > b[1] ? a : b);
@@ -287,14 +368,14 @@ function renderMonthlySummary() {
 }
 
 // ========== Charts Rendering ==========
-function renderCharts() {
-  renderCategoryPieChart();
-  renderSpendingTrendChart();
-  renderSavingsTrendChart();
+function renderCharts(period = currentPeriod) {
+  renderCategoryPieChart(period);
+  renderSpendingTrendChart(period);
+  renderSavingsTrendChart(period);
 }
 
-function renderCategoryPieChart() {
-  const p = store[currentPeriod];
+function renderCategoryPieChart(period = currentPeriod) {
+  const p = getPeriodData(period);
   const ctx = document.getElementById('categoryChart');
   
   // Destroy existing chart if it exists
@@ -302,10 +383,10 @@ function renderCategoryPieChart() {
     chartInstances.categoryChart.destroy();
   }
   
-  // Group expenses by name (category)
+  // Group expenses by category
   const categoryData = {};
   p.expenses.forEach(e => {
-    const category = e.name || "Other";
+    const category = e.category || "Other";
     categoryData[category] = (categoryData[category] || 0) + e.amount;
   });
   
@@ -347,7 +428,7 @@ function renderCategoryPieChart() {
   });
 }
 
-function renderSpendingTrendChart() {
+function renderSpendingTrendChart(period = currentPeriod) {
   const ctx = document.getElementById('spendingTrendChart');
   
   // Destroy existing chart
@@ -356,7 +437,7 @@ function renderSpendingTrendChart() {
   }
   
   // Get last 6 months data
-  const { year, month } = parsePeriod(currentPeriod);
+  const { year, month } = parsePeriod(period);
   const labels = [];
   const data = [];
   
@@ -365,7 +446,7 @@ function renderSpendingTrendChart() {
     const period = toPeriod(d.getFullYear(), d.getMonth() + 1);
     labels.push(periodDisplay(period));
     
-    const periodData = store[period];
+    const periodData = window.store.periods && window.store.periods[period];
     const spending = periodData ? periodData.expenses.reduce((sum, e) => sum + e.amount, 0) : 0;
     data.push(spending);
   }
@@ -434,7 +515,7 @@ function renderSavingsTrendChart() {
     const period = toPeriod(d.getFullYear(), d.getMonth() + 1);
     labels.push(periodDisplay(period));
     
-    const periodData = store[period];
+    const periodData = window.store.periods && window.store.periods[period];
     if (periodData) {
       const income = periodData.budget + periodData.added;
       const expenses = periodData.expenses.reduce((sum, e) => sum + e.amount, 0);
@@ -494,9 +575,10 @@ function renderSavingsTrendChart() {
 // ========== Edit Functions ==========
 function openEditExpenseModal(index) {
   editingExpenseIndex = index;
-  const expense = store[currentPeriod].expenses[index];
+  const expense = getPeriodData(currentPeriod).expenses[index];
   
   document.getElementById("edit-expense-name").value = expense.name;
+  document.getElementById("edit-expense-category").value = expense.category || "Other";
   document.getElementById("edit-expense-amount").value = expense.amount;
   document.getElementById("edit-expense-modal").style.display = "flex";
 }
@@ -510,6 +592,7 @@ function updateExpense() {
   if (editingExpenseIndex === null) return;
   
   const name = document.getElementById("edit-expense-name").value.trim();
+  const category = document.getElementById("edit-expense-category").value;
   const amt = Number(document.getElementById("edit-expense-amount").value);
   
   if (!name) {
@@ -522,22 +605,30 @@ function updateExpense() {
     return;
   }
   
-  store[currentPeriod].expenses[editingExpenseIndex] = {
+  const p = getPeriodData(currentPeriod);
+  const oldExpense = p.expenses[editingExpenseIndex];
+  
+  p.expenses[editingExpenseIndex] = {
+    id: oldExpense.id || crypto.randomUUID(),
     name,
     amount: amt,
-    timestamp: store[currentPeriod].expenses[editingExpenseIndex].timestamp
+    category: category || "Other",
+    date: oldExpense.date || new Date().toISOString().split('T')[0],
+    timestamp: oldExpense.timestamp
   };
   
   closeEditExpenseModal();
   saveStore();
   renderDashboard();
+  renderMonthlySummary();
+  renderCharts();
   
   document.getElementById("last-action").textContent = `Updated expense: ${name}`;
 }
 
 function openEditIncomeModal(index) {
   editingIncomeIndex = index;
-  const income = store[currentPeriod].income[index];
+  const income = getPeriodData(currentPeriod).income[index];
   
   document.getElementById("edit-income-source").value = income.source;
   document.getElementById("edit-income-amount").value = income.amount;
@@ -565,19 +656,27 @@ function updateIncome() {
     return;
   }
   
-  const oldAmount = store[currentPeriod].income[editingIncomeIndex].amount;
-  store[currentPeriod].income[editingIncomeIndex] = {
+  const p = getPeriodData(currentPeriod);
+  const oldIncome = p.income[editingIncomeIndex];
+  const oldAmount = oldIncome.amount;
+  
+  p.income[editingIncomeIndex] = {
+    id: oldIncome.id || crypto.randomUUID(),
     source,
     amount: amt,
-    timestamp: store[currentPeriod].income[editingIncomeIndex].timestamp
+    category: oldIncome.category || "Income",
+    date: oldIncome.date || new Date().toISOString().split('T')[0],
+    timestamp: oldIncome.timestamp
   };
   
   // Update the added amount
-  store[currentPeriod].added = store[currentPeriod].added - oldAmount + amt;
+  p.added = p.added - oldAmount + amt;
   
   closeEditIncomeModal();
   saveStore();
   renderDashboard();
+  renderMonthlySummary();
+  renderCharts();
   
   document.getElementById("last-action").textContent = `Updated income: ${source}`;
 }

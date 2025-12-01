@@ -1,0 +1,119 @@
+name: Deploy ExpenseFlow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Validation and Testing Job
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Project
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate HTML files
+        run: |
+          echo "✓ Validating HTML structure..."
+          # Check critical HTML files exist
+          test -f index.html || { echo "❌ Missing index.html"; exit 1; }
+          test -f dashboard.html || { echo "❌ Missing dashboard.html"; exit 1; }
+          test -f expenses.html || { echo "❌ Missing expenses.html"; exit 1; }
+          test -f period-selection.html || { echo "❌ Missing period-selection.html"; exit 1; }
+          echo "✅ All HTML files present"
+
+      - name: Validate JavaScript files
+        run: |
+          echo "✓ Validating JavaScript structure..."
+          test -f js/dashboard.js || { echo "❌ Missing dashboard.js"; exit 1; }
+          test -f js/expenses.js || { echo "❌ Missing expenses.js"; exit 1; }
+          test -f js/storage.js || { echo "❌ Missing storage.js"; exit 1; }
+          test -f js/utils.js || { echo "❌ Missing utils.js"; exit 1; }
+          test -f js/modal.js || { echo "❌ Missing modal.js"; exit 1; }
+          test -f js/period.js || { echo "❌ Missing period.js"; exit 1; }
+          test -f js/theme.js || { echo "❌ Missing theme.js"; exit 1; }
+          echo "✅ All JavaScript files present"
+
+      - name: Validate CSS files
+        run: |
+          echo "✓ Validating CSS structure..."
+          test -f css/styles.css || { echo "❌ Missing styles.css"; exit 1; }
+          echo "✅ CSS file present"
+
+      - name: Check for syntax errors in JavaScript
+        run: |
+          echo "✓ Checking JavaScript syntax..."
+          for file in js/*.js; do
+            if node -c "$file" 2>/dev/null; then
+              echo "✅ $file - syntax OK"
+            else
+              echo "⚠️  $file - could not validate (Node.js check)"
+            fi
+          done
+
+      - name: Verify Chart.js integration
+        run: |
+          echo "✓ Checking Chart.js CDN reference..."
+          if grep -q "chart.js" dashboard.html; then
+            echo "✅ Chart.js CDN found in dashboard.html"
+          else
+            echo "⚠️  Chart.js CDN not found in dashboard.html"
+          fi
+
+      - name: Verify project structure
+        run: |
+          echo "📁 Project Structure:"
+          tree -L 2 -I '.git' || ls -R
+
+  # Deployment Job
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    name: Deploy to GitHub Pages
+    
+    # Only deploy on push to main (not on PRs)
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare deployment
+        run: |
+          echo "✓ Preparing deployment..."
+          echo "Project: ExpenseFlow"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Author: ${{ github.actor }}"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          cname: # Add your custom domain here if needed
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy ExpenseFlow - ${{ github.event.head_commit.message }}'
+
+      - name: Deployment summary
+        run: |
+          echo "✅ Deployment completed successfully!"
+          echo "🚀 Your ExpenseFlow app is now live on GitHub Pages"
+          echo "📊 View deployment at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"

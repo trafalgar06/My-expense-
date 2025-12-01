@@ -10,15 +10,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="has-sidebar">
+  <!-- Sidebar Container -->
+  <div id="sidebar-container"></div>
+  
   <div class="container">
-    <div class="card">
-      <div class="header">
+    <div class="dashboard-grid">
+      <!-- Top area with greeting and buttons -->
+      <div class="top-area">
         <div>
-          <h1 class="text-h1">Expense List</h1>
+          <h1 class="greeting">Good morning, User</h1>
           <p class="text-body text-secondary mt-2">Detailed view of all expenses for the selected period</p>
         </div>
-        <div class="flex gap-3">
+
+        <div class="button-group">
           <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
             <span class="theme-icon sun"></span>
             <span class="theme-icon moon"></span>
@@ -30,7 +35,7 @@
       </div>
       
       <!-- Period Display -->
-      <div class="period-selector mb-6">
+      <div class="period-selector card card-span-12">
         <div class="flex items-center gap-3">
           <button id="prev-month-btn" class="btn btn-ghost btn-icon">
             ←
@@ -45,8 +50,60 @@
         </button>
       </div>
       
+      <!-- Filters Section -->
+      <div class="card card-span-12">
+        <h3 class="text-h3 mb-4">🔍 Search & Filter</h3>
+        <div class="filter-grid">
+          <div class="input-group">
+            <label for="filter-search" class="input-label">Search</label>
+            <input type="text" id="filter-search" class="input-field" placeholder="Search by name...">
+          </div>
+          
+          <div class="input-group">
+            <label for="filter-category" class="input-label">Category</label>
+            <select id="filter-category" class="input-field">
+              <option value="all">All Categories</option>
+              <option value="Food">🍔 Food</option>
+              <option value="Transport">🚗 Transport</option>
+              <option value="Shopping">🛍️ Shopping</option>
+              <option value="Entertainment">🎬 Entertainment</option>
+              <option value="Healthcare">🏥 Healthcare</option>
+              <option value="Education">📚 Education</option>
+              <option value="Bills">📄 Bills</option>
+              <option value="Income">💰 Income</option>
+              <option value="Other">📦 Other</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label for="filter-type" class="input-label">Type</label>
+            <select id="filter-type" class="input-field">
+              <option value="all">All Types</option>
+              <option value="expense">Expenses Only</option>
+              <option value="income">Income Only</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label for="filter-min-amount" class="input-label">Min Amount</label>
+            <input type="number" id="filter-min-amount" class="input-field" placeholder="0">
+          </div>
+          
+          <div class="input-group">
+            <label for="filter-max-amount" class="input-label">Max Amount</label>
+            <input type="number" id="filter-max-amount" class="input-field" placeholder="Any">
+          </div>
+          
+          <div class="input-group flex items-end">
+            <button id="reset-filters-btn" class="btn btn-secondary w-full">
+              Reset Filters
+            </button>
+          </div>
+        </div>
+      </div>
+      
       <!-- Expense List -->
-      <div class="card">
+      <div class="card card-span-12">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-h2">All Transactions</h2>
           <div class="flex gap-2">
@@ -66,7 +123,7 @@
       </div>
       
       <!-- Last Action -->
-      <div class="text-center mt-4">
+      <div class="text-center mt-4 card card-span-12">
         <p id="last-action" class="text-body-sm text-tertiary">Welcome to ExpenseFlow!</p>
       </div>
     </div>
@@ -75,12 +132,10 @@
   <script src="js/theme.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/sidebar.js"></script>
   <script src="js/expenses.js"></script>
   <script>
-    // Initialize the expenses page
-    document.addEventListener('DOMContentLoaded', function() {
-      initExpenses();
-    });
+    // Expenses initialization handled by expenses.js
   </script>
 </body>
 </html>
