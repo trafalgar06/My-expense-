@@ -1461,7 +1461,7 @@ select:focus {
 /* Mobile responsive grid */
 @media (max-width: 1023px) {
   .dashboard-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: var(--space-4);
   }
 
@@ -1479,8 +1479,11 @@ select:focus {
   }
 
   .card-span-12 {
-    grid-column: span 12 !important;
+    grid-column: span 1 !important;
   }
+
+  /* Ensure 2-column layout for tablets inside the 1-column dashboard grid if needed, 
+     but usually stacking is safer. Keeping strict 1-col for safety on smaller touch devices. */
 
   .top-area {
     flex-direction: column;
@@ -1491,6 +1494,9 @@ select:focus {
   .button-group {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
+    /* Added for smaller screens */
+    gap: var(--space-2);
   }
 }
 
@@ -1552,9 +1558,17 @@ select:focus {
   align-items: flex-end;
 }
 
-@media (max-width: 640px) {
+/* Better filter collapsing on mobile */
+@media (max-width: 768px) {
+  .filter-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
   .filter-grid {
     grid-template-columns: 1fr;
+    gap: var(--space-3);
   }
 }
 
@@ -1597,7 +1611,11 @@ select:focus {
 }
 
 .items-end {
-  align-items: end;
+  align-items: flex-end;
+}
+
+.flex-wrap {
+  flex-wrap: wrap !important;
 }
 
 .justify-between {
@@ -2673,4 +2691,110 @@ input:disabled+.slider {
 
 .hidden {
   display: none !important;
+}
+
+/* =========================================
+   FAIL-SAFE MOBILE OVERRIDES
+   ========================================= */
+@media (max-width: 1023px) {
+
+  /* Force all grids to be single column flex stacks */
+  .dashboard-grid,
+  .cards-section,
+  .filter-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Force all cards to take full width */
+  .card,
+  .dashboard-card,
+  .income-card,
+  .overview-card,
+  .strategy-card,
+  .money-flow-card,
+  .finances-card,
+  .card-span-4,
+  .card-span-6,
+  .card-span-8,
+  .card-span-12 {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    grid-column: auto !important;
+    grid-row: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Force wrapping for all flex containers with gap (button groups) */
+  .flex.gap-2,
+  .flex.gap-3,
+  .flex.gap-4,
+  .button-group {
+    flex-wrap: wrap !important;
+  }
+
+  /* Ensure header items wrap */
+  .page-header .top-area {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  /* Fix button containers in expenses.html - VERTICAL STACK FIX */
+  .transaction-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: var(--space-2) !important;
+    margin-top: var(--space-3) !important;
+  }
+
+  .transaction-actions button {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  /* Goal page specific fix */
+  #goals-list {
+    width: 100% !important;
+  }
+
+  /* Settings Page Fixes */
+  .settings-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .setting-item {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    text-align: center !important;
+    gap: var(--space-3) !important;
+  }
+
+  .setting-label {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: var(--space-2) !important;
+  }
+
+  .setting-item select,
+  .setting-item button,
+  .setting-item .input-field {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Color picker centering */
+  .color-picker {
+    justify-content: center !important;
+  }
+
+  /* Filter Grid Fixes */
+  .filter-grid .input-group {
+    width: 100% !important;
+  }
 }
