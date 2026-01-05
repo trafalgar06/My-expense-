@@ -233,6 +233,9 @@
 
     goalsList.innerHTML = "";
 
+    // Update goal insights always, even if list is empty
+    updateGoalInsights();
+
     if (window.store.goals.length === 0) {
       goalsList.innerHTML = `
       <div class="empty-state">
@@ -281,21 +284,19 @@
 
       goalsList.appendChild(goalItem);
     });
-
-    // Update goal insights
-    updateGoalInsights();
   }
 
   function updateGoalInsights() {
-    // Force insights to zero as requested
-    const totalGoals = 0;
-    const totalSaved = 0;
-    const totalTarget = 0;
+    // Calculate insights from store
+    const goals = window.store.goals || [];
+    const totalGoals = goals.length;
+    const totalSaved = goals.reduce((sum, goal) => sum + (goal.currentAmount || 0), 0);
+    const totalTarget = goals.reduce((sum, goal) => sum + (goal.targetAmount || 0), 0);
 
-    // Update the insights section if it exists
-    const activeGoalsElement = document.querySelector('.text-2xl.font-bold.text-primary');
-    const totalSavedElement = document.querySelector('.text-2xl.font-bold.text-success');
-    const totalTargetElement = document.querySelector('.text-2xl.font-bold.text-accent');
+    // Update the insights section using specific IDs
+    const activeGoalsElement = document.getElementById('insight-active-goals');
+    const totalSavedElement = document.getElementById('insight-total-saved');
+    const totalTargetElement = document.getElementById('insight-total-target');
 
     if (activeGoalsElement) activeGoalsElement.textContent = totalGoals;
     if (totalSavedElement) totalSavedElement.textContent = fmt(totalSaved);

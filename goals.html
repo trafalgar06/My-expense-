@@ -147,17 +147,17 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div class="p-4 border border-primary rounded-xl text-center">
-                <div class="text-2xl font-bold text-primary">3</div>
+                <div id="insight-active-goals" class="text-2xl font-bold text-primary">0</div>
                 <div class="text-body text-secondary">Active Goals</div>
               </div>
 
               <div class="p-4 border border-primary rounded-xl text-center">
-                <div class="text-2xl font-bold text-success">₹132,500</div>
+                <div id="insight-total-saved" class="text-2xl font-bold text-success">₹ 0</div>
                 <div class="text-body text-secondary">Total Saved</div>
               </div>
 
               <div class="p-4 border border-primary rounded-xl text-center">
-                <div class="text-2xl font-bold text-accent">₹350,000</div>
+                <div id="insight-total-target" class="text-2xl font-bold text-accent">₹ 0</div>
                 <div class="text-body text-secondary">Total Target</div>
               </div>
             </div>
@@ -165,23 +165,21 @@
               <p id="last-action" class="text-body-sm text-tertiary">Set financial goals to achieve your dreams!</p>
             </div>
           </div>
-  </div>
-  </div>
+        </section> <!-- page-body -->
+      </section> <!-- page-container -->
+    </main>
 
-  </section> <!-- page-body -->
-  </main>
+    <script src="js/theme.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/audit.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/goals.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script>
+      // Goals page initialization now handled by bootstrap.js
+    </script>
 
-  <script src="js/theme.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/audit.js"></script>
-  <script src="js/sidebar.js"></script>
-  <script src="js/goals.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script>
-    // Goals page initialization now handled by bootstrap.js
-  </script>
-  </div>
 </body>
 
 </html>
