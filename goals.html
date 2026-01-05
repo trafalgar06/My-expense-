@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,42 +10,202 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b82f6">
 </head>
-<body class="has-sidebar">
-  <!-- Sidebar Container -->
-  <div id="sidebar-container"></div>
 
-  <div class="container">
-    <div class="dashboard-grid">
-      <!-- Top area with greeting and buttons -->
-      <div class="top-area">
-        <div>
-          <h1 class="greeting">🎯 Goals</h1>
-          <p class="text-body text-secondary mt-2">Set and achieve your financial goals</p>
-        </div>
-      </div>
-      
-      <!-- Coming Soon Content -->
-      <div class="card card-span-12">
-        <div class="empty-state" style="padding: var(--space-16) var(--space-8);">
-          <div class="empty-state-icon" style="font-size: 4rem;">🎯</div>
-          <h2 class="text-h2 mb-3">Financial Goals</h2>
-          <p class="text-body text-secondary mb-6">This feature is under development</p>
-          <div class="alert alert-info">
-            <strong>ℹ️ Coming Soon:</strong> Set savings goals, budget targets, and track your progress towards financial milestones.
+<body class="has-sidebar sidebar-expanded">
+  <div class="app-layout">
+    <!-- Sidebar container for dynamic insertion -->
+    <div id="sidebar-container"></div>
+
+    <!-- All visible page content must be wrapped inside BOTH wrappers -->
+    <main class="main-content">
+      <section class="container page-container">
+
+        <header class="page-header">
+          <!-- Top area with greeting and buttons -->
+          <div class="top-area">
+            <div>
+              <h1 class="greeting">🎯 Goals</h1>
+              <p class="text-body text-secondary mt-2">Set and track your financial goals</p>
+            </div>
           </div>
-          <a href="dashboard.html" class="btn btn-primary mt-6">
-            Go to Dashboard
-          </a>
-        </div>
-      </div>
-    </div>
+        </header>
+
+        <section class="page-body">
+
+          <div class="dashboard-grid">
+            <!-- Period Display -->
+            <div class="period-selector card card-span-12">
+              <div class="flex items-center gap-3">
+                <button id="prev-month-btn" class="btn btn-ghost btn-icon">
+                  ←
+                </button>
+                <h2 id="current-period" class="text-h2">January 2023</h2>
+                <button id="next-month-btn" class="btn btn-ghost btn-icon">
+                  →
+                </button>
+              </div>
+              <button id="today-btn" class="btn btn-secondary">
+                Today
+              </button>
+            </div>
+
+            <!-- Goals Management Section -->
+            <div class="card card-span-4">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-h2">Add Goal</h2>
+              </div>
+
+              <div class="input-group mb-4">
+                <label for="new-goal-name" class="input-label">Goal Name</label>
+                <input type="text" id="new-goal-name" class="input-field" placeholder="e.g., Vacation">
+              </div>
+
+              <div class="input-group mb-4">
+                <label for="new-goal-amount" class="input-label">Target Amount</label>
+                <div class="input-with-symbol">
+                  <span class="currency-symbol">₹</span>
+                  <input type="number" id="new-goal-amount" class="input-field" placeholder="0">
+                </div>
+              </div>
+
+              <div class="input-group mb-4">
+                <label for="new-goal-date" class="input-label">Target Date</label>
+                <input type="date" id="new-goal-date" class="input-field">
+              </div>
+
+              <div class="input-group mb-4">
+                <label for="new-goal-description" class="input-label">Description</label>
+                <textarea id="new-goal-description" class="input-field" rows="3"
+                  placeholder="Optional details"></textarea>
+              </div>
+
+              <button id="save-goal-btn" class="btn btn-primary w-full">
+                Save Goal
+              </button>
+            </div>
+
+            <!-- Active Goals List -->
+            <div class="card card-span-8">
+              <h2 class="text-h2 mb-4">Active Goals</h2>
+
+              <div id="goals-list" class="space-y-4">
+                <!-- Goals will be populated dynamically -->
+                <div class="goal-item p-4 border border-primary rounded-xl">
+                  <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                      <h3 class="text-h3 font-bold">Vacation Fund</h3>
+                      <p class="text-body text-secondary mb-2">Save ₹50,000 by December 2023</p>
+
+                      <div class="mb-2">
+                        <div class="flex justify-between text-sm mb-1">
+                          <span>Progress</span>
+                          <span>₹12,500 / ₹50,000</span>
+                        </div>
+                        <div class="w-full bg-bg-secondary rounded-full h-2">
+                          <div class="bg-accent-primary h-2 rounded-full" style="width: 25%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex gap-2 ml-4">
+                      <button class="btn btn-ghost btn-sm">Edit</button>
+                      <button class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="goal-item p-4 border border-primary rounded-xl">
+                  <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                      <h3 class="text-h3 font-bold">Emergency Fund</h3>
+                      <p class="text-body text-secondary mb-2">Save ₹100,000 by June 2024</p>
+
+                      <div class="mb-2">
+                        <div class="flex justify-between text-sm mb-1">
+                          <span>Progress</span>
+                          <span>₹35,000 / ₹100,000</span>
+                        </div>
+                        <div class="w-full bg-bg-secondary rounded-full h-2">
+                          <div class="bg-success h-2 rounded-full" style="width: 35%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex gap-2 ml-4">
+                      <button class="btn btn-ghost btn-sm">Edit</button>
+                      <button class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="goal-item p-4 border border-primary rounded-xl">
+                  <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                      <h3 class="text-h3 font-bold">Car Down Payment</h3>
+                      <p class="text-body text-secondary mb-2">Save ₹200,000 by March 2025</p>
+
+                      <div class="mb-2">
+                        <div class="flex justify-between text-sm mb-1">
+                          <span>Progress</span>
+                          <span>₹85,000 / ₹200,000</span>
+                        </div>
+                        <div class="w-full bg-bg-secondary rounded-full h-2">
+                          <div class="bg-accent-primary h-2 rounded-full" style="width: 42.5%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex gap-2 ml-4">
+                      <button class="btn btn-ghost btn-sm">Edit</button>
+                      <button class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Goal Insights -->
+            <div class="card card-span-12">
+              <h2 class="text-h2 mb-4">Goal Insights</h2>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 border border-primary rounded-xl text-center">
+                  <div class="text-2xl font-bold text-primary">3</div>
+                  <div class="text-body text-secondary">Active Goals</div>
+                </div>
+
+                <div class="p-4 border border-primary rounded-xl text-center">
+                  <div class="text-2xl font-bold text-success">₹132,500</div>
+                  <div class="text-body text-secondary">Total Saved</div>
+                </div>
+
+                <div class="p-4 border border-primary rounded-xl text-center">
+                  <div class="text-2xl font-bold text-accent">₹350,000</div>
+                  <div class="text-body text-secondary">Total Target</div>
+                </div>
+              </div>
+              <div class="text-center mt-6 pt-4" style="border-top: 1.5px solid var(--border-primary);">
+                <p id="last-action" class="text-body-sm text-tertiary">Set financial goals to achieve your dreams!</p>
+              </div>
+            </div>
+          </div>
   </div>
 
+  </section> <!-- page-body -->
+  </main>
+
   <script src="js/theme.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audit.js"></script>
   <script src="js/sidebar.js"></script>
+  <script src="js/goals.js"></script>
+  <script src="js/bootstrap.js"></script>
   <script>
-    // No additional initialization needed - sidebar.js handles everything
+    // Goals page initialization now handled by bootstrap.js
   </script>
+  </div>
 </body>
+
 </html>
+

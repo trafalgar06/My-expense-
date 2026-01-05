@@ -9,14 +9,15 @@ const DEFAULT_SETTINGS = {
   theme: "light",
   currency: "INR",
   defaultPeriod: "last-used",
-  cloudSync: false
+  cloudSync: false,
+  categories: ["Food", "Transport", "Shopping", "Entertainment", "Healthcare", "Education", "Bills", "Other"]
 };
 
 function loadStore() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     let data = raw ? JSON.parse(raw) : {};
-    
+
     // SAFE MIGRATION: Detect old structure and upgrade
     if (!data.periods && !data.settings) {
       // Old structure detected - migrate safely
@@ -26,7 +27,8 @@ function loadStore() {
         periods: {},
         settings: loadSettings()
       };
-      
+
+      // MIGRATION: Add date field to all existing items
       // Migrate all old periods to new structure
       for (const key in oldData) {
         if (key.match(/^\d{4}-\d{2}$/)) {
@@ -34,26 +36,40 @@ function loadStore() {
           data.periods[key] = {
             budget: oldData[key].budget || 0,
             added: oldData[key].added || 0,
-            expenses: (oldData[key].expenses || []).map(e => ({
-              id: e.id || crypto.randomUUID(),
-              name: e.name,
-              amount: e.amount,
-              category: e.category || "Other",
-              date: e.date || new Date(e.timestamp).toISOString().split('T')[0],
-              timestamp: e.timestamp
-            })),
-            income: (oldData[key].income || []).map(i => ({
-              id: i.id || crypto.randomUUID(),
-              source: i.source,
-              amount: i.amount,
-              category: i.category || "Other",
-              date: i.date || new Date(i.timestamp).toISOString().split('T')[0],
-              timestamp: i.timestamp
-            }))
+            expenses: (oldData[key].expenses || []).map(e => {
+              // SAFETY MIGRATION: Add date field if missing
+              if (!e.date) {
+                const d = new Date(e.timestamp);
+                e.date = d.toLocaleDateString("en-CA");
+              }
+              return {
+                id: e.id || generateUUID(),
+                name: e.name,
+                amount: e.amount,
+                category: e.category || "Other",
+                date: e.date,
+                timestamp: e.timestamp
+              };
+            }),
+            income: (oldData[key].income || []).map(i => {
+              // SAFETY MIGRATION: Add date field if missing
+              if (!i.date) {
+                const d = new Date(i.timestamp);
+                i.date = d.toLocaleDateString("en-CA");
+              }
+              return {
+                id: i.id || generateUUID(),
+                source: i.source,
+                amount: i.amount,
+                category: i.category || "Other",
+                date: i.date,
+                timestamp: i.timestamp
+              };
+            })
           };
         }
       }
-      
+
       // Save migrated data
       window.store = data;
       saveStore();
@@ -63,6 +79,32 @@ function loadStore() {
       window.store = data;
       if (!window.store.settings) {
         window.store.settings = loadSettings();
+      }
+      if (!window.store.categories) {
+        window.store.categories = [...DEFAULT_SETTINGS.categories];
+      }
+
+      // SAFETY MIGRATION: Add date field to all existing items in new structure
+      for (const periodKey in window.store.periods) {
+        const period = window.store.periods[periodKey];
+        if (period.expenses) {
+          period.expenses = period.expenses.map(e => {
+            if (!e.date) {
+              const d = new Date(e.timestamp);
+              e.date = d.toLocaleDateString("en-CA");
+            }
+            return e;
+          });
+        }
+        if (period.income) {
+          period.income = period.income.map(i => {
+            if (!i.date) {
+              const d = new Date(i.timestamp);
+              i.date = d.toLocaleDateString("en-CA");
+            }
+            return i;
+          });
+        }
       }
     }
   } catch (e) {
@@ -114,31 +156,4 @@ function ensurePeriod(p) {
 function getPeriodData(period) {
   ensurePeriod(period);
   return window.store.periods[period];
-}
-
-// ========== Cloud Sync Infrastructure (Placeholder) ==========
-// These functions are placeholders for future Supabase integration
-
-function uploadStore() {
-  // Placeholder for future cloud sync implementation
-  // Will upload window.store to Supabase
-  console.log("[Cloud Sync] Upload triggered (not implemented yet)");
-  return Promise.resolve();
-}
-
-function downloadStore() {
-  // Placeholder for future cloud sync implementation
-  // Will download store from Supabase
-  console.log("[Cloud Sync] Download triggered (not implemented yet)");
-  return Promise.resolve(null);
-}
-
-function syncOnStartup() {
-  // Placeholder for future cloud sync implementation
-  // Will sync data on app startup if cloudSync is enabled
-  const settings = window.store.settings || {};
-  if (settings.cloudSync) {
-    console.log("[Cloud Sync] Startup sync triggered (not implemented yet)");
-  }
-  return Promise.resolve();
 }

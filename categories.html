@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,42 +10,190 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b82f6">
 </head>
-<body class="has-sidebar">
-  <!-- Sidebar Container -->
-  <div id="sidebar-container"></div>
 
-  <div class="container">
-    <div class="dashboard-grid">
-      <!-- Top area with greeting and buttons -->
-      <div class="top-area">
-        <div>
-          <h1 class="greeting">🏷️ Categories</h1>
-          <p class="text-body text-secondary mt-2">Organize your expenses by category</p>
-        </div>
-      </div>
-      
-      <!-- Coming Soon Content -->
-      <div class="card card-span-12">
-        <div class="empty-state" style="padding: var(--space-16) var(--space-8);">
-          <div class="empty-state-icon" style="font-size: 4rem;">🏷️</div>
-          <h2 class="text-h2 mb-3">Category Management</h2>
-          <p class="text-body text-secondary mb-6">This feature is under development</p>
-          <div class="alert alert-info">
-            <strong>ℹ️ Coming Soon:</strong> Create and manage custom categories for better expense organization.
+<body class="has-sidebar sidebar-expanded">
+  <div class="app-layout">
+    <!-- Sidebar container for dynamic insertion -->
+    <div id="sidebar-container"></div>
+
+    <!-- All visible page content must be wrapped inside BOTH wrappers -->
+    <main class="main-content">
+      <section class="container page-container">
+
+        <header class="page-header">
+          <!-- Top area with greeting and buttons -->
+          <div class="top-area">
+            <div>
+              <h1 class="greeting">🏷️ Categories</h1>
+              <p class="text-body text-secondary mt-2">Manage your expense categories</p>
+            </div>
           </div>
-          <a href="dashboard.html" class="btn btn-primary mt-6">
-            Go to Dashboard
-          </a>
-        </div>
-      </div>
-    </div>
+        </header>
+
+        <section class="page-body">
+
+          <div class="dashboard-grid">
+            <!-- Period Display -->
+            <div class="period-selector card card-span-12">
+              <div class="flex items-center gap-3">
+                <button id="prev-month-btn" class="btn btn-ghost btn-icon">
+                  ←
+                </button>
+                <h2 id="current-period" class="text-h2">January 2023</h2>
+                <button id="next-month-btn" class="btn btn-ghost btn-icon">
+                  →
+                </button>
+              </div>
+              <button id="today-btn" class="btn btn-secondary">
+                Today
+              </button>
+            </div>
+
+            <!-- Categories Management Section -->
+            <div class="card card-span-4">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-h2">Add Category</h2>
+              </div>
+
+              <div class="input-group mb-4">
+                <label for="new-category-name" class="input-label">New Category Name</label>
+                <input type="text" id="new-category-name" class="input-field w-full mb-4"
+                  placeholder="Enter category name">
+                <button id="save-category-btn" class="btn btn-primary w-full">Save Category</button>
+              </div>
+            </div>
+
+            <!-- Existing Categories List -->
+            <div class="card card-span-8">
+              <h2 class="text-h2 mb-4">Existing Categories</h2>
+
+              <div id="categories-list" class="space-y-3">
+                <!-- Categories will be populated dynamically -->
+                <div class="category-item p-4 border border-primary rounded-xl flex justify-between items-center">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl">🍔</span>
+                    <span class="font-medium">Food</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-ghost btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                  </div>
+                </div>
+
+                <div class="category-item p-4 border border-primary rounded-xl flex justify-between items-center">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl">🚗</span>
+                    <span class="font-medium">Transport</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-ghost btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                  </div>
+                </div>
+
+                <div class="category-item p-4 border border-primary rounded-xl flex justify-between items-center">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl">🛍️</span>
+                    <span class="font-medium">Shopping</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-ghost btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                  </div>
+                </div>
+
+                <div class="category-item p-4 border border-primary rounded-xl flex justify-between items-center">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl">🎬</span>
+                    <span class="font-medium">Entertainment</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-ghost btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                  </div>
+                </div>
+
+                <div class="category-item p-4 border border-primary rounded-xl flex justify-between items-center">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl">🏥</span>
+                    <span class="font-medium">Healthcare</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-ghost btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                  </div>
+                </div>
+
+                <div class="category-item p-4 border border-primary rounded-xl flex justify-between items-center">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl">📚</span>
+                    <span class="font-medium">Education</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-ghost btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                  </div>
+                </div>
+
+                <div class="category-item p-4 border border-primary rounded-xl flex justify-between items-center">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl">📄</span>
+                    <span class="font-medium">Bills</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-ghost btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                  </div>
+                </div>
+
+                <div
+                  class="category-item p-4 border border-border-primary rounded-xl flex justify-between items-center">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xl">📦</span>
+                    <span class="font-medium">Other</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-ghost btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category Statistics -->
+            <div class="card card-span-12">
+              <h2 class="text-h2 mb-4">Category Statistics</h2>
+              <p class="text-body text-secondary">Track spending by category over time</p>
+
+              <div class="mt-4 p-4 bg-bg-secondary rounded-xl">
+                <p class="text-center text-body text-secondary">Category statistics will be displayed here</p>
+              </div>
+              <div class="text-center mt-6 pt-4" style="border-top: 1.5px solid var(--border-primary);">
+                <p id="last-action" class="text-body-sm text-tertiary">Manage your categories to better organize
+                  expenses!
+                </p>
+              </div>
+            </div>
+          </div>
   </div>
+  </section> <!-- page-body -->
+  </main>
 
   <script src="js/theme.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audit.js"></script>
   <script src="js/sidebar.js"></script>
+  <script src="js/categories.js"></script>
+  <script src="js/bootstrap.js"></script>
   <script>
-    // No additional initialization needed - sidebar.js handles everything
+    // Categories page initialization now handled by bootstrap.js
   </script>
+  </div>
 </body>
+
 </html>
+

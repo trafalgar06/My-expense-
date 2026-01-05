@@ -1,141 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ExpenseFlow - Expense List</title>
-  <meta name="description" content="Detailed expense list view">
+  <title>DenaroTrack - Expenses</title>
+  <meta name="description" content="Expense tracking and management">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b82f6">
 </head>
-<body class="has-sidebar">
-  <!-- Sidebar Container -->
-  <div id="sidebar-container"></div>
-  
-  <div class="container">
-    <div class="dashboard-grid">
-      <!-- Top area with greeting and buttons -->
-      <div class="top-area">
-        <div>
-          <h1 class="greeting">Good morning, User</h1>
-          <p class="text-body text-secondary mt-2">Detailed view of all expenses for the selected period</p>
-        </div>
 
-        <div class="button-group">
-          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-            <span class="theme-icon sun"></span>
-            <span class="theme-icon moon"></span>
-          </button>
-          <button id="back-to-dashboard" class="btn btn-secondary">
-            Back to Dashboard
-          </button>
-        </div>
-      </div>
-      
-      <!-- Period Display -->
-      <div class="period-selector card card-span-12">
-        <div class="flex items-center gap-3">
-          <button id="prev-month-btn" class="btn btn-ghost btn-icon">
-            ←
-          </button>
-          <h2 id="current-period" class="text-h2">January 2023</h2>
-          <button id="next-month-btn" class="btn btn-ghost btn-icon">
-            →
-          </button>
-        </div>
-        <button id="today-btn" class="btn btn-secondary">
-          Today
-        </button>
-      </div>
-      
-      <!-- Filters Section -->
-      <div class="card card-span-12">
-        <h3 class="text-h3 mb-4">🔍 Search & Filter</h3>
-        <div class="filter-grid">
-          <div class="input-group">
-            <label for="filter-search" class="input-label">Search</label>
-            <input type="text" id="filter-search" class="input-field" placeholder="Search by name...">
+<body class="has-sidebar sidebar-expanded">
+  <div class="app-layout">
+    <!-- Sidebar container for dynamic insertion -->
+    <div id="sidebar-container"></div>
+
+    <!-- All visible page content must be wrapped inside BOTH wrappers -->
+    <main class="main-content">
+      <section class="container page-container">
+
+        <header class="page-header">
+          <!-- Top area with greeting and buttons -->
+          <div class="top-area">
+            <div>
+              <h1 class="greeting">💸 Transactions</h1>
+              <p class="text-body text-secondary mt-2">Track and manage your income and expenses</p>
+            </div>
           </div>
-          
-          <div class="input-group">
-            <label for="filter-category" class="input-label">Category</label>
-            <select id="filter-category" class="input-field">
-              <option value="all">All Categories</option>
-              <option value="Food">🍔 Food</option>
-              <option value="Transport">🚗 Transport</option>
-              <option value="Shopping">🛍️ Shopping</option>
-              <option value="Entertainment">🎬 Entertainment</option>
-              <option value="Healthcare">🏥 Healthcare</option>
-              <option value="Education">📚 Education</option>
-              <option value="Bills">📄 Bills</option>
-              <option value="Income">💰 Income</option>
-              <option value="Other">📦 Other</option>
-            </select>
-          </div>
-          
-          <div class="input-group">
-            <label for="filter-type" class="input-label">Type</label>
-            <select id="filter-type" class="input-field">
-              <option value="all">All Types</option>
-              <option value="expense">Expenses Only</option>
-              <option value="income">Income Only</option>
-            </select>
-          </div>
-          
-          <div class="input-group">
-            <label for="filter-min-amount" class="input-label">Min Amount</label>
-            <input type="number" id="filter-min-amount" class="input-field" placeholder="0">
-          </div>
-          
-          <div class="input-group">
-            <label for="filter-max-amount" class="input-label">Max Amount</label>
-            <input type="number" id="filter-max-amount" class="input-field" placeholder="Any">
-          </div>
-          
-          <div class="input-group flex items-end">
-            <button id="reset-filters-btn" class="btn btn-secondary w-full">
-              Reset Filters
+        </header>
+
+        <section class="page-body">
+
+          <!-- Period Display -->
+          <div class="period-selector card card-span-12">
+            <div class="flex items-center gap-3">
+              <button id="prev-month-btn" class="btn btn-ghost btn-icon">
+                ←
+              </button>
+              <h2 id="current-period" class="text-h2">January 2023</h2>
+              <button id="next-month-btn" class="btn btn-ghost btn-icon">
+                →
+              </button>
+            </div>
+            <button id="today-btn" class="btn btn-secondary">
+              Today
             </button>
           </div>
-        </div>
-      </div>
-      
-      <!-- Expense List -->
-      <div class="card card-span-12">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-h2">All Transactions</h2>
-          <div class="flex gap-2">
-            <button id="clear-month-btn" class="btn btn-danger">
-              Clear Month
-            </button>
+
+          <!-- Filters Section -->
+          <div class="card card-span-12">
+            <h3 class="text-h3 mb-4">🔍 Search & Filter</h3>
+            <div class="filter-grid">
+              <div class="input-group">
+                <label for="filter-search" class="input-label">Search</label>
+                <input type="text" id="filter-search" class="input-field" placeholder="Search by name...">
+              </div>
+
+              <div class="input-group">
+                <label for="filter-type" class="input-label">Type</label>
+                <select id="filter-type" class="input-field">
+                  <option value="all">All Types</option>
+                  <option value="expense">Expense</option>
+                  <option value="income">Income</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label for="filter-category" class="input-label">Category</label>
+                <select id="filter-category" class="input-field">
+                  <option value="all">All Categories</option>
+                  <!-- Other options will be populated dynamically -->
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label for="filter-min-amount" class="input-label">Min Amount</label>
+                <input type="number" id="filter-min-amount" class="input-field" placeholder="0">
+              </div>
+
+              <div class="input-group">
+                <label for="filter-max-amount" class="input-label">Max Amount</label>
+                <input type="number" id="filter-max-amount" class="input-field" placeholder="Any">
+              </div>
+
+              <div class="input-group flex items-end">
+                <button id="reset-filters-btn" class="btn btn-secondary">
+                  Reset Filters
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        
-        <div id="expense-list" class="expense-list">
-          <div class="empty-state">
-            <div class="empty-state-icon">📊</div>
-            <h3 class="text-h3 mb-2">No transactions yet</h3>
-            <p class="text-body text-secondary">Add your first transaction to get started</p>
+
+          <!-- Add Transaction Buttons -->
+          <div class="card card-span-12">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-h2">Transactions</h2>
+              <div class="flex gap-2">
+                <button id="add-expense-btn" class="btn btn-primary">
+                  Add Expense
+                </button>
+                <button id="add-income-btn" class="btn btn-accent">
+                  Add Income
+                </button>
+                <button id="clear-month-btn" class="btn btn-danger">
+                  Clear Month
+                </button>
+              </div>
+            </div>
+
+            <div id="expense-list" class="expense-list">
+              <div class="empty-state">
+                <div class="empty-state-icon">💸</div>
+                <h3 class="text-h3 mb-2">No expenses yet</h3>
+                <p class="text-body text-secondary">Add your first expense to get started</p>
+              </div>
+              <div class="text-center mt-6 pt-4" style="border-top: 1.5px solid var(--border-primary);">
+                <p id="last-action" class="text-body-sm text-tertiary">Welcome to Expense Management!</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      
-      <!-- Last Action -->
-      <div class="text-center mt-4 card card-span-12">
-        <p id="last-action" class="text-body-sm text-tertiary">Welcome to ExpenseFlow!</p>
-      </div>
-    </div>
+        </section> <!-- page-body -->
+    </main>
+
+    <script src="js/theme.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/audit.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/expenses.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script>
+      // Expenses page initialization now handled by bootstrap.js
+    </script>
   </div>
-
-  <script src="js/theme.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/sidebar.js"></script>
-  <script src="js/expenses.js"></script>
-  <script>
-    // Expenses initialization handled by expenses.js
-  </script>
 </body>
+
 </html>
+

@@ -12,20 +12,30 @@
     const current = window.location.pathname.split("/").pop();
     const items = [
       { name: "Dashboard", href: "dashboard.html", icon: "📊" },
-      { name: "Expenses", href: "expenses.html", icon: "💸" },
-      { name: "Income", href: "income.html", icon: "💰" },
+      { name: "Transactions", href: "expenses.html", icon: "💸" },
       { name: "Categories", href: "categories.html", icon: "🏷️" },
-      { name: "Reports", href: "reports.html", icon: "📈" },
+      { name: "Reports", href: "report.html", icon: "📈" },
       { name: "Goals", href: "goals.html", icon: "🎯" },
-      { name: "Settings", href: "settings.html", icon: "⚙️" }
+      { name: "Settings", href: "setting.html", icon: "⚙️" }
     ];
 
-    return items.map(i => `
-      <a href="${i.href}" class="sidebar-item ${current === i.href ? "sidebar-item-active" : ""}">
-        <span class="sidebar-icon">${i.icon}</span>
-        <span class="sidebar-label">${i.name}</span>
-      </a>
-    `).join("");
+    return items.map(i => {
+      if (i.disabled) {
+        return `
+          <div class="sidebar-item sidebar-disabled" title="Coming Soon">
+            <span class="sidebar-icon">${i.icon}</span>
+            <span class="sidebar-label">${i.name} (Coming Soon)</span>
+          </div>
+        `;
+      } else {
+        return `
+          <a href="${i.href}" class="sidebar-item ${current === i.href ? "sidebar-item-active" : ""}" onclick="logNavigationEvent('${i.name}', '${i.href}')">
+            <span class="sidebar-icon">${i.icon}</span>
+            <span class="sidebar-label">${i.name}</span>
+          </a>
+        `;
+      }
+    }).join("");
   }
 
   function buildSidebarHTML() {
@@ -45,8 +55,16 @@
         </nav>
 
         <div class="sidebar-footer">
-          <button onclick="toggleTheme()" class="sidebar-theme-toggle">
-            <span class="sidebar-label">Toggle Theme</span>
+          <div class="sidebar-theme-controls">
+            <button onclick="window.setTheme('light', true)" class="theme-btn-light" aria-label="Light Mode" title="Light Mode">
+              ☀️
+            </button>
+            <button onclick="window.setTheme('dark', true)" class="theme-btn-dark" aria-label="Dark Mode" title="Dark Mode">
+              🌙
+            </button>
+          </div>
+          <button id="install-app-btn" class="sidebar-btn-primary mt-4 w-full">
+            Install App
           </button>
         </div>
       </aside>
@@ -67,7 +85,7 @@
       btn.className = "mobile-menu-toggle";
       btn.innerHTML = "☰";
 
-      document.body.insertBefore(btn, sidebarContainer);
+      sidebarContainer.parentNode.insertBefore(btn, sidebarContainer);
 
       btn.addEventListener("click", event => {
         event.stopPropagation();
@@ -86,7 +104,7 @@
     // Add collapse button functionality
     const collapseBtn = sidebar.querySelector('.sidebar-collapse-btn');
     if (collapseBtn) {
-      collapseBtn.addEventListener('click', function(e) {
+      collapseBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         if (isDesktop()) {
           const isExpanded = document.body.classList.contains('sidebar-expanded');
@@ -97,6 +115,10 @@
             document.body.classList.remove('sidebar-collapsed');
             document.body.classList.add('sidebar-expanded');
           }
+          // Notify charts and other responsive elements
+          setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+          }, 300); // Wait for transition
         }
       });
     }
@@ -131,5 +153,29 @@
   document.readyState === "loading"
     ? document.addEventListener("DOMContentLoaded", init)
     : init();
+
+  window.showInstallButton = function () {
+    const btn = document.getElementById('install-app-btn');
+    if (btn) {
+      btn.classList.remove('hidden');
+      // Remove old listener if possible (though checking for existing isn't easy without a named function, 
+      // but here we are redefining the logic mainly or it's a one-time init).
+      // A better approach for cleaner code:
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+
+      newBtn.addEventListener('click', async () => {
+        if (window.installPrompt) {
+          window.installPrompt.prompt();
+          const { outcome } = await window.installPrompt.userChoice;
+          console.log(`User response to the install prompt: ${outcome}`);
+          window.installPrompt = null;
+          newBtn.classList.add('hidden');
+        } else {
+          alert("To install DenaroTrack:\n\nChrome: Click the install icon in the address bar.\nSafari (iOS): Tap 'Share' -> 'Add to Home Screen'.");
+        }
+      });
+    }
+  };
 
 })();
