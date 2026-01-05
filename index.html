@@ -1,47 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DenaroTrack - Modern Expense Tracker</title>
   <meta name="description" content="A modern, responsive expense tracker with a fresh design approach">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=fix1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#3b82f6">
 </head>
+
 <body>
   <div class="container">
     <!-- Top area with greeting and buttons -->
-      <div class="top-area">
-        <div></div>
-        <div style="text-align: right;">
-          <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-            <span class="theme-icon sun"></span>
-            <span class="theme-icon moon"></span>
-          </button>
-        </div>
+    <div class="top-area">
+      <div></div>
+      <div style="text-align: right;">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+          <span class="theme-icon sun"></span>
+          <span class="theme-icon moon"></span>
+        </button>
       </div>
-      
-      <div class="card card-span-12">
-        <div class="text-center">
-          <h1 class="text-display text-accent mb-4">DenaroTrack</h1>
-          <p class="text-body text-secondary mb-6">A modern expense tracking application</p>
-          <p class="text-body mb-6">Redirecting to the period selection page...</p>
-          <div class="loading-spinner"></div>
-        </div>
+    </div>
+
+    <div class="card card-span-12">
+      <div class="text-center">
+        <h1 class="text-display text-accent mb-4">DenaroTrack</h1>
+        <p class="text-body text-secondary mb-6">A modern expense tracking application</p>
+        <p class="text-body mb-6">Redirecting to the period selection page...</p>
+        <div class="loading-spinner"></div>
       </div>
+    </div>
   </div>
 
   <script src="js/theme.js"></script>
   <script>
     // Redirect to period selection page
-    setTimeout(function() {
+    setTimeout(function () {
       window.location.href = 'period-selection.html';
     }, 1500);
   </script>
 </body>
-</html>
 
+</html>

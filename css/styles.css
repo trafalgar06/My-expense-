@@ -1454,6 +1454,7 @@ select:focus {
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--space-6);
   width: 100%;
+  padding: 0 !important;
 }
 
 .cards-section {
