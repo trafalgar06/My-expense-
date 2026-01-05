@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DenaroTrack - Select Period</title>
+  <meta name="description" content="Select a period to track your expenses">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b82f6">
+</head>
+
+<body class="page-period-selection">
+  <div class="container">
+    <!-- Top area with greeting and buttons -->
+    <div class="top-area">
+      <div>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+          <span class="theme-icon sun"></span>
+          <span class="theme-icon moon"></span>
+        </button>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="card card-span-12">
+      <div class="period-selection">
+        <h1 class="text-display text-accent mb-2">DenaroTrack</h1>
+        <p class="text-body text-secondary">Select a period to track your expenses</p>
+
+        <div class="period-form">
+          <div class="period-input-group input-group">
+            <label for="year-select" class="input-label">Year</label>
+            <select id="year-select" class="input-field"></select>
+          </div>
+
+          <div class="period-input-group input-group">
+            <label for="month-select" class="input-label">Month</label>
+            <select id="month-select" class="input-field"></select>
+          </div>
+        </div>
+
+        <button id="continue-btn" class="btn btn-primary">
+          Continue to Dashboard
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/period.js"></script>
+  <script src="js/bootstrap.js"></script>
+</body>
+
+</html>
+
