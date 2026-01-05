@@ -177,18 +177,16 @@
 
   // Consistent period initialization across modules
   function initPeriod() {
-    // Get current page name to create page-specific key
+    // Always start with current month (Today)
+    // This overrides any saved history to ensure fresh state on reload
+    const currentPeriod = toPeriod(new Date().getFullYear(), new Date().getMonth() + 1);
+
+    // Update storage with current period so other functions stay in sync
     const page = getCurrentPage();
     const key = `period_${page}`;
+    localStorage.setItem(key, currentPeriod);
 
-    const savedPeriod = localStorage.getItem(key);
-    if (savedPeriod) {
-      return savedPeriod;
-    } else {
-      const currentPeriod = toPeriod(new Date().getFullYear(), new Date().getMonth() + 1);
-      localStorage.setItem(key, currentPeriod);
-      return currentPeriod;
-    }
+    return currentPeriod;
   }
 
   // Consistent period navigation across modules
