@@ -2,7 +2,7 @@
   "name": "DenaroTrack",
   "short_name": "DenaroTrack",
   "description": "A modern, responsive expense tracker application.",
-  "start_url": "/dashboard.html",
+  "start_url": "/period-selection.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
