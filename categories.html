@@ -31,26 +31,28 @@
               <p class="text-body text-secondary mt-2">Manage your expense categories</p>
             </div>
           </div>
+
+          <!-- Period Display -->
+          <div class="period-selector mt-6 mb-2">
+            <div class="flex items-center gap-3">
+              <button id="prev-month-btn" class="btn btn-ghost btn-icon">
+                ←
+              </button>
+              <h2 id="current-period" class="text-h2">January 2023</h2>
+              <button id="next-month-btn" class="btn btn-ghost btn-icon">
+                →
+              </button>
+            </div>
+            <button id="today-btn" class="btn btn-secondary">
+              Today
+            </button>
+          </div>
         </header>
 
         <section class="page-body">
 
           <div class="dashboard-grid">
-            <!-- Period Display -->
-            <div class="period-selector card card-span-12">
-              <div class="flex items-center gap-3">
-                <button id="prev-month-btn" class="btn btn-ghost btn-icon">
-                  ←
-                </button>
-                <h2 id="current-period" class="text-h2">January 2023</h2>
-                <button id="next-month-btn" class="btn btn-ghost btn-icon">
-                  →
-                </button>
-              </div>
-              <button id="today-btn" class="btn btn-secondary">
-                Today
-              </button>
-            </div>
+
 
             <!-- Categories Management Section -->
             <div class="card card-span-4">
