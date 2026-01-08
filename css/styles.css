@@ -416,6 +416,10 @@ body {
 /* Mobile sidebar behavior */
 @media (max-width: 1023px) {
   .sidebar-collapse-btn {
+    display: flex !important;
+  }
+
+  body.sidebar-open .mobile-menu-toggle {
     display: none !important;
   }
 
@@ -2224,9 +2228,7 @@ select:focus {
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
+  margin-left: var(--space-2);
 }
 
 .sidebar-collapse-btn:hover {

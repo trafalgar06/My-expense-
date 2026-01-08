@@ -119,6 +119,9 @@
           setTimeout(() => {
             window.dispatchEvent(new Event('resize'));
           }, 300); // Wait for transition
+        } else {
+          // Mobile behavior: close sidebar
+          document.body.classList.remove("sidebar-open");
         }
       });
     }
