@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DenaroTrack - Settings</title>
+  <meta name="description" content="Application settings and preferences">
+  <link rel="stylesheet" href="css/styles.css?v=fix4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b82f6">
+  <!-- Load Emoji Picker module -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1/index.js"></script>
+</head>
+
+<body class="has-sidebar">
+  <script>
+    (function () {
+      const isExpanded = localStorage.getItem("sidebarExpanded") !== "false";
+      document.body.classList.add(isExpanded ? "sidebar-expanded" : "sidebar-collapsed");
+    })();
+  </script>
+  <div class="app-layout">
+    <!-- Sidebar container for dynamic insertion -->
+    <div id="sidebar-container"></div>
+
+    <!-- All visible page content must be wrapped inside BOTH wrappers -->
+    <main class="main-content">
+      <section class="container page-container">
+
+        <header class="page-header">
+          <!-- Top area with greeting and buttons -->
+          <div class="top-area">
+            <div>
+              <h1 class="greeting">⚙️ Settings</h1>
+              <p class="text-body text-secondary mt-2">Application settings and preferences</p>
+            </div>
+          </div>
+        </header>
+
+        <section class="page-body">
+
+
+
+          <!-- General Settings -->
+          <div class="card card-span-12">
+            <h2 class="text-h2 mb-4">General Settings</h2>
+
+            <div class="settings-grid">
+              <!-- Currency Setting -->
+              <div class="setting-item">
+                <div class="setting-label">
+                  <span class="setting-icon">💱</span>
+                  <div>
+                    <h3>Currency</h3>
+                    <p class="text-secondary">Default currency for transactions</p>
+                  </div>
+                </div>
+                <select id="currency-setting" class="input-field w-auto">
+                  <option value="INR">INR (₹)</option>
+                  <option value="USD">USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="JPY">JPY (¥)</option>
+                </select>
+              </div>
+
+
+              <!-- Install App Setting -->
+              <div class="setting-item">
+                <div class="setting-label">
+                  <span class="setting-icon">📲</span>
+                  <div>
+                    <h3>Install App</h3>
+                    <p class="text-secondary">Install on your device</p>
+                  </div>
+                </div>
+                <button id="settings-install-btn" class="btn btn-primary">Install</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Appearance Settings -->
+          <div class="card card-span-12">
+            <h2 class="text-h2 mb-4">Appearance</h2>
+
+            <div class="settings-grid">
+              <!-- Theme Setting -->
+              <div class="setting-item">
+                <div class="setting-label">
+                  <span class="setting-icon">🎨</span>
+                  <div>
+                    <h3>Theme</h3>
+                    <p class="text-secondary">Choose your preferred theme</p>
+                  </div>
+                </div>
+                <div class="theme-toggle-group">
+                  <button id="light-theme-btn" class="btn btn-secondary">Light</button>
+                  <button id="dark-theme-btn" class="btn btn-secondary">Dark</button>
+                  <button id="auto-theme-btn" class="btn btn-secondary active">Auto</button>
+                </div>
+              </div>
+
+              <!-- Accent Color Setting -->
+              <div class="setting-item">
+                <div class="setting-label">
+                  <span class="setting-icon">🌈</span>
+                  <div>
+                    <h3>Accent Color</h3>
+                    <p class="text-secondary">Primary color for the app</p>
+                  </div>
+                </div>
+                <div class="color-picker">
+                  <button class="color-option bg-blue-500" data-color="blue"></button>
+                  <button class="color-option bg-green-500" data-color="green"></button>
+                  <button class="color-option bg-purple-500" data-color="purple"></button>
+                  <button class="color-option bg-red-500" data-color="red"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Settings -->
+          <div class="card card-span-12">
+            <h2 class="text-h2 mb-4">Data & Privacy</h2>
+
+            <div class="settings-grid">
+              <!-- Backup Setting -->
+              <div class="setting-item">
+                <div class="setting-label">
+                  <span class="setting-icon">💾</span>
+                  <div>
+                    <h3>Backup Data</h3>
+                    <p class="text-secondary">Export your financial data</p>
+                  </div>
+                </div>
+                <button id="backup-btn" class="btn btn-secondary">Backup</button>
+              </div>
+
+              <!-- Import Setting -->
+              <div class="setting-item">
+                <div class="setting-label">
+                  <span class="setting-icon">📤</span>
+                  <div>
+                    <h3>Import Data</h3>
+                    <p class="text-secondary">Import from other apps</p>
+                  </div>
+                </div>
+                <button id="import-btn" class="btn btn-secondary">Import</button>
+              </div>
+
+              <!-- Clear Data Setting -->
+              <div class="setting-item">
+                <div class="setting-label">
+                  <span class="setting-icon">🗑️</span>
+                  <div>
+                    <h3>Clear Data</h3>
+                    <p class="text-secondary">Reset all financial data</p>
+                  </div>
+                </div>
+                <button id="clear-data-btn" class="btn btn-danger">Clear Data</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advanced Settings -->
+          <div class="card card-span-12">
+            <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;" id="toggle-advanced-settings">
+              <h2 class="text-h2" style="margin: 0;">Advanced Settings</h2>
+              <span id="advanced-settings-arrow" style="font-size: 20px; transition: transform 0.3s;">▾</span>
+            </div>
+
+            <div id="advanced-settings-content" class="advanced-settings-content">
+              <div class="settings-grid settings-grid-stacked">
+                <!-- Audit Trail Toggle -->
+                <div class="setting-item">
+                  <div class="setting-label">
+                    <span class="setting-icon">📜</span>
+                    <div>
+                      <h3 class="text-h3 font-medium">Enable Audit Logging</h3>
+                      <p class="text-body text-secondary" style="font-size: 13px;">Record history of account operations</p>
+                    </div>
+                  </div>
+                  <div class="audit-toggle-group">
+                    <button id="download-audit-btn" class="btn btn-secondary btn-sm" style="display: none;">Download Audit Log</button>
+                    <label class="switch">
+                      <input type="checkbox" id="audit-logging-toggle">
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Manage Accounts link -->
+                <div class="setting-item">
+                  <div class="setting-label">
+                    <span class="setting-icon">🏦</span>
+                    <div>
+                      <h3 class="text-h3 font-medium">Manage Accounts & Transfers</h3>
+                      <p class="text-body text-secondary" style="font-size: 13px;">Bank, Cash, and Savings balances live on your Dashboard</p>
+                    </div>
+                  </div>
+                  <a href="dashboard.html#accounts" class="btn btn-secondary btn-sm setting-item-link">Open Dashboard</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Spending Limits Settings -->
+          <div class="card card-span-12">
+            <h2 class="text-h2 mb-4">Category Spending Limits & Custom Categories</h2>
+            <p class="text-body text-secondary mb-4" style="font-size: 14px;">Set maximum monthly spending limits per category. Enter 0 or leave blank for no limit.</p>
+
+            <div id="category-limits-list" class="space-y-4" style="display: flex; flex-direction: column; gap: var(--space-4);">
+              <!-- Populated dynamically with category limits inputs -->
+            </div>
+
+            <!-- Add Custom Category section -->
+            <div style="border-top: 1px dashed var(--border-primary); padding-top: var(--space-4); margin-top: var(--space-6);">
+              <h3 class="text-h3 mb-3">➕ Add Custom Category</h3>
+              <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: flex-end;">
+                <div class="input-group" style="flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 4px;">
+                  <label for="new-cat-name" class="input-label">Category Name</label>
+                  <input type="text" id="new-cat-name" class="input-field" placeholder="e.g. Subscriptions" style="width: 100%;">
+                </div>
+                <div class="input-group" style="width: 120px; position: relative; display: flex; flex-direction: column; gap: 4px;">
+                  <label for="new-cat-emoji" class="input-label">Emoji</label>
+                  <input type="text" id="new-cat-emoji" class="input-field" placeholder="Select" readonly style="cursor: pointer; width: 100%;">
+                  <!-- Floating Emoji Picker element -->
+                  <div id="emoji-picker-container" style="display: none; position: absolute; bottom: 48px; right: 0; z-index: 1000; box-shadow: var(--shadow-lg); border-radius: var(--border-radius-lg);">
+                    <emoji-picker></emoji-picker>
+                  </div>
+                </div>
+                <button id="add-cat-btn" class="btn btn-primary" style="height: 42px;">Add</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account Actions -->
+          <div class="card card-span-12">
+            <h2 class="text-h2 mb-4">About</h2>
+            <p class="text-body text-secondary">DenaroTrack stores all your data locally in this browser. There's no account or login — your data stays on this device unless you export a backup from Data & Privacy above.</p>
+          </div>
+
+        </section> <!-- page-body -->
+      </section> <!-- page-container -->
+    </main>
+
+    <!-- Script Order (ES Modules Entry) -->
+    <script type="module" src="js/bootstrap.js?v=fix4"></script>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DenaroTrack - Dashboard</title>
+  <meta name="description" content="Expense tracking dashboard">
+  <link rel="stylesheet" href="css/styles.css?v=fix4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b82f6">
+</head>
+
+<body class="has-sidebar">
+  <script>
+    (function () {
+      const isExpanded = localStorage.getItem("sidebarExpanded") !== "false";
+      document.body.classList.add(isExpanded ? "sidebar-expanded" : "sidebar-collapsed");
+    })();
+  </script>
+  <div class="app-layout">
+    <!-- Sidebar container for dynamic insertion -->
+    <div id="sidebar-container"></div>
+
+    <!-- All visible page content must be wrapped inside BOTH wrappers -->
+    <main class="main-content">
+      <section class="container page-container">
+
+        <header class="page-header">
+          <!-- Top area with greeting and buttons -->
+          <div class="top-area">
+            <div>
+              <h1 class="greeting">Good morning, User</h1>
+              <p class="text-body text-secondary mt-2">Manage your spending efficiently</p>
+            </div>
+
+            <div class="button-group">
+              <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                <span class="theme-icon sun"></span>
+                <span class="theme-icon moon"></span>
+              </button>
+              <button id="export-btn" class="btn btn-ghost">
+                Export CSV
+              </button>
+              <button id="change-period-btn" class="btn btn-secondary">
+                Change Period
+              </button>
+            </div>
+          </div>
+
+          <!-- Period Navigation (Moved here) -->
+          <div class="period-selector mt-6 mb-2">
+            <div class="flex items-center gap-3">
+              <button id="prev-month-btn" class="btn btn-ghost btn-icon">
+                ←
+              </button>
+              <h2 id="current-period" class="text-h2">January 2023</h2>
+              <button id="next-month-btn" class="btn btn-ghost btn-icon">
+                →
+              </button>
+            </div>
+            <button id="today-btn" class="btn btn-secondary">
+              Today
+            </button>
+          </div>
+        </header>
+
+        <section class="page-body">
+
+
+          <!-- Cards section -->
+          <div class="dashboard-grid">
+
+            <!-- Cards section -->
+            <div class="cards-section">
+              <!-- Income card (Total period income) -->
+              <div class="income-card dashboard-card card">
+                <h2 class="text-h2 mb-4">Income</h2>
+                <div class="text-caption text-secondary mb-3">TOTAL INCOME THIS PERIOD</div>
+                <div id="income-display" class="stat-value text-success">₹ 0.00</div>
+              </div>
+
+              <!-- Overview card with donut chart -->
+              <div class="overview-card dashboard-card card">
+                <h2 class="text-h2 mb-4">Spend</h2>
+                <div class="text-caption text-secondary mb-3">Spent this period</div>
+                <div id="spent-display" class="stat-value text-danger">₹ 0.00</div>
+              </div>
+
+              <!-- Expense strategy card with bar chart -->
+              <div class="strategy-card dashboard-card card">
+                <h2 class="text-h2 mb-4">Remaining</h2>
+                <div class="text-caption text-secondary mb-3">Bank + Cash, right now</div>
+                <div id="remaining-display" class="stat-value text-accent">₹ 0.00</div>
+              </div>
+
+              <!-- Accounts card: Bank / Cash / Savings breakdown -->
+              <div id="accounts" class="finances-card dashboard-card card accounts-card">
+                <h2 class="text-h2 mb-1">Accounts</h2>
+                <div class="text-caption text-secondary mb-4">Where your money actually is</div>
+
+                <div class="account-row account-row-bank">
+                  <span class="account-row-label">
+                    <span class="account-row-icon">🏦</span>
+                    Bank / Online
+                  </span>
+                  <span id="account-bank-display" class="account-row-value">₹ 0.00</span>
+                </div>
+                <div class="account-row account-row-cash">
+                  <span class="account-row-label">
+                    <span class="account-row-icon">💵</span>
+                    Cash
+                  </span>
+                  <span id="account-cash-display" class="account-row-value">₹ 0.00</span>
+                </div>
+                <div class="account-row account-row-savings">
+                  <span class="account-row-label">
+                    <span class="account-row-icon">🐖</span>
+                    Savings
+                  </span>
+                  <span id="account-savings-display" class="account-row-value">₹ 0.00</span>
+                </div>
+
+                <div class="accounts-actions-primary">
+                  <button id="add-money-btn" class="btn btn-secondary w-full">
+                    Add Income
+                  </button>
+                  <button id="add-expense-btn" class="btn btn-primary w-full">
+                    Add Expense
+                  </button>
+                </div>
+                <div class="accounts-actions-secondary">
+                  <button id="transfer-money-btn" class="btn btn-secondary w-full btn-sm">
+                    ⇄ Transfer
+                  </button>
+                  <button id="reconcile-cash-btn" class="btn btn-secondary w-full btn-sm">
+                    ✓ Reconcile Cash
+                  </button>
+                </div>
+              </div>
+
+              <!-- Category spending limits progress card -->
+              <div id="category-limits-card" class="card" style="grid-column: span 6;">
+                <h2 class="text-h2 mb-4">Category Limits</h2>
+                <div class="text-caption text-secondary mb-3">Monthly category spending progress</div>
+                <div id="category-limits-progress" class="space-y-4" style="display: flex; flex-direction: column; gap: var(--space-4); max-height: 220px; overflow-y: auto;">
+                  <div class="empty-state" style="padding: var(--space-4) 0;">
+                    <p class="text-body text-secondary">No limits configured. Set them in Settings.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Expenses -->
+            <div class="card card-span-12">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-h2">Recent Transactions</h2>
+                <button id="view-all-expenses" class="btn btn-secondary">
+                  View All
+                </button>
+              </div>
+
+              <div id="expense-list-preview" class="expense-list">
+                <div class="empty-state">
+                  <div class="empty-state-icon">📊</div>
+                  <h3 class="text-h3 mb-2">No transactions yet</h3>
+                  <p class="text-body text-secondary">Add your first transaction to get started</p>
+                </div>
+              </div>
+            </div>
+          </div> <!-- dashboard-grid -->
+        </section> <!-- page-body -->
+      </section> <!-- page-container -->
+    </main>
+
+    <!-- Add Money Modal -->
+    <div id="add-money-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="text-h2">Add Money to Budget</h2>
+          <button id="close-add-money" class="modal-close">&times;</button>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="add-money-source" class="input-label">Source of Money</label>
+          <input type="text" id="add-money-source" class="input-field" placeholder="Where did you get this money?">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="add-money-amount" class="input-label">Amount to Add</label>
+          <input type="number" id="add-money-amount" class="input-field" placeholder="Enter amount to add to budget">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="add-money-account" class="input-label">Account</label>
+          <select id="add-money-account" class="input-field">
+            <option value="bank">🏦 Bank / Online</option>
+            <option value="cash">💵 Cash</option>
+          </select>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="add-money-date" class="input-label">Date</label>
+          <input type="date" id="add-money-date" class="input-field">
+        </div>
+
+        <div class="input-group mb-4" style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <input type="checkbox" id="add-money-recurring" style="width: auto; margin: 0;">
+          <label for="add-money-recurring" class="input-label" style="margin: 0; cursor: pointer;">Recurring</label>
+        </div>
+        <div id="add-money-frequency-group" class="input-group mb-4" style="display: none; margin-bottom: 16px;">
+          <label for="add-money-frequency" class="input-label">Frequency</label>
+          <select id="add-money-frequency" class="input-field">
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Monthly">Monthly</option>
+          </select>
+        </div>
+
+        <button id="submit-add-money" class="btn btn-primary w-full">
+          Add to Budget
+        </button>
+      </div>
+    </div>
+
+    <!-- Add Expense Modal -->
+    <div id="add-expense-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="text-h2">Add New Expense</h2>
+          <button id="close-add-expense" class="modal-close">&times;</button>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="expense-name" class="input-label">Item Name</label>
+          <input type="text" id="expense-name" class="input-field" placeholder="What did you spend on?">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="expense-category" class="input-label">Category</label>
+          <select id="expense-category" class="input-field">
+            <!-- Options will be populated dynamically -->
+          </select>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="expense-amount" class="input-label">Amount</label>
+          <input type="number" id="expense-amount" class="input-field" placeholder="How much?">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="expense-account" class="input-label">Account</label>
+          <select id="expense-account" class="input-field">
+            <option value="bank">🏦 Bank / Online</option>
+            <option value="cash">💵 Cash</option>
+            <option value="savings">🐖 Savings</option>
+          </select>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="expense-date" class="input-label">Date</label>
+          <input type="date" id="expense-date" class="input-field">
+        </div>
+
+        <div class="input-group mb-4" style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+          <input type="checkbox" id="expense-recurring" style="width: auto; margin: 0;">
+          <label for="expense-recurring" class="input-label" style="margin: 0; cursor: pointer;">Recurring</label>
+        </div>
+        <div id="expense-frequency-group" class="input-group mb-4" style="display: none; margin-bottom: 16px;">
+          <label for="expense-frequency" class="input-label">Frequency</label>
+          <select id="expense-frequency" class="input-field">
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Monthly">Monthly</option>
+          </select>
+        </div>
+
+        <button id="submit-add-expense" class="btn btn-primary w-full">
+          Add Expense
+        </button>
+      </div>
+    </div>
+
+    <!-- Edit Expense Modal -->
+    <div id="edit-expense-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="text-h2">Edit Expense</h2>
+          <button id="close-edit-expense" class="modal-close">&times;</button>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="edit-expense-name" class="input-label">Item Name</label>
+          <input type="text" id="edit-expense-name" class="input-field" placeholder="What did you spend on?">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="edit-expense-category" class="input-label">Category</label>
+          <select id="edit-expense-category" class="input-field">
+            <!-- Options will be populated dynamically -->
+          </select>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="edit-expense-amount" class="input-label">Amount</label>
+          <input type="number" id="edit-expense-amount" class="input-field" placeholder="How much?">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="edit-expense-date" class="input-label">Date</label>
+          <input type="date" id="edit-expense-date" class="input-field">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="edit-expense-account" class="input-label">Account</label>
+          <select id="edit-expense-account" class="input-field">
+            <option value="bank">🏦 Bank / Online</option>
+            <option value="cash">💵 Cash</option>
+            <option value="savings">🐖 Savings</option>
+          </select>
+        </div>
+
+        <button id="submit-edit-expense" class="btn btn-primary w-full">
+          Update Expense
+        </button>
+      </div>
+    </div>
+
+    <!-- Edit Income Modal -->
+    <div id="edit-income-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="text-h2">Edit Income</h2>
+          <button id="close-edit-income" class="modal-close">&times;</button>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="edit-income-source" class="input-label">Source of Money</label>
+          <input type="text" id="edit-income-source" class="input-field" placeholder="Where did you get this money?">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="edit-income-amount" class="input-label">Amount</label>
+          <input type="number" id="edit-income-amount" class="input-field" placeholder="Enter amount">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="edit-income-date" class="input-label">Date</label>
+          <input type="date" id="edit-income-date" class="input-field">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="edit-income-account" class="input-label">Account</label>
+          <select id="edit-income-account" class="input-field">
+            <option value="bank">🏦 Bank / Online</option>
+            <option value="cash">💵 Cash</option>
+          </select>
+        </div>
+
+        <button id="submit-edit-income" class="btn btn-primary w-full">
+          Update Income
+        </button>
+      </div>
+    </div>
+
+    <!-- Transfer Money Modal -->
+    <div id="transfer-money-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="text-h2">Transfer Money</h2>
+          <button id="close-transfer-money" class="modal-close">&times;</button>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="transfer-from-account" class="input-label">From Account</label>
+          <select id="transfer-from-account" class="input-field">
+            <option value="bank">🏦 Bank / Online</option>
+            <option value="cash">💵 Cash</option>
+            <option value="savings">🐖 Savings</option>
+          </select>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="transfer-to-account" class="input-label">To Account</label>
+          <select id="transfer-to-account" class="input-field">
+            <option value="cash">💵 Cash</option>
+            <option value="bank">🏦 Bank / Online</option>
+            <option value="savings">🐖 Savings</option>
+          </select>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="transfer-amount" class="input-label">Amount</label>
+          <input type="number" id="transfer-amount" class="input-field" placeholder="How much to transfer?">
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="transfer-note" class="input-label">Note (optional)</label>
+          <input type="text" id="transfer-note" class="input-field" placeholder="e.g. ATM withdrawal, Moved to FD">
+        </div>
+
+        <p id="transfer-error" class="text-danger text-body-sm mb-3" style="display: none;"></p>
+
+        <button id="submit-transfer" class="btn btn-primary w-full">
+          Transfer
+        </button>
+      </div>
+    </div>
+
+    <!-- Reconcile Cash Modal -->
+    <div id="reconcile-cash-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="text-h2">Reconcile Cash</h2>
+          <button id="close-reconcile-cash" class="modal-close">&times;</button>
+        </div>
+
+        <div class="input-group mb-4">
+          <label for="reconcile-cash-amount" class="input-label">How much cash do you actually have right now?</label>
+          <input type="number" id="reconcile-cash-amount" class="input-field" placeholder="Enter actual cash amount">
+        </div>
+
+        <p id="reconcile-error" class="text-danger text-body-sm mb-3" style="display: none;"></p>
+        <p id="reconcile-success" class="text-success text-body-sm mb-3" style="display: none;"></p>
+
+        <button id="submit-reconcile-cash" class="btn btn-primary w-full">
+          Update Cash Balance
+        </button>
+      </div>
+    </div>
+
+    <!-- Script Order (ES Modules Entry) -->
+    <script type="module" src="js/bootstrap.js?v=fix4"></script>
+
+    <script>
+      // Category dropdowns are now populated by the initialization system
+    </script>
+  </div>
+</body>
+
+</html>

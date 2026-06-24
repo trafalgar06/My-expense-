@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DenaroTrack - Reports</title>
+  <meta name="description" content="Financial reports and analytics">
+  <link rel="stylesheet" href="css/styles.css?v=fix4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b82f6">
+</head>
+
+<body class="has-sidebar">
+  <script>
+    (function () {
+      const isExpanded = localStorage.getItem("sidebarExpanded") !== "false";
+      document.body.classList.add(isExpanded ? "sidebar-expanded" : "sidebar-collapsed");
+    })();
+  </script>
+  <div class="app-layout">
+    <!-- Sidebar container for dynamic insertion -->
+    <div id="sidebar-container"></div>
+
+    <!-- All visible page content must be wrapped inside BOTH wrappers -->
+    <main class="main-content">
+      <section class="container page-container">
+
+        <header class="page-header">
+          <!-- Top area with greeting and buttons -->
+          <div class="top-area">
+            <div>
+              <h1 class="greeting">📈 Reports</h1>
+              <p class="text-body text-secondary mt-2">Analytics and financial reports</p>
+            </div>
+          </div>
+
+          <!-- Period Display -->
+          <div class="period-selector mt-6 mb-2">
+            <div class="flex items-center gap-3">
+              <button id="prev-month-btn" class="btn btn-ghost btn-icon">
+                ←
+              </button>
+              <h2 id="current-period" class="text-h2">January 2023</h2>
+              <button id="next-month-btn" class="btn btn-ghost btn-icon">
+                →
+              </button>
+            </div>
+            <button id="today-btn" class="btn btn-secondary">
+              Today
+            </button>
+          </div>
+        </header>
+
+        <section class="page-body">
+
+
+
+          <!-- Summary Stats Grid -->
+          <div class="dashboard-grid">
+            <div class="card card-span-4">
+              <h2 class="text-h2 mb-2">Income</h2>
+              <div id="summary-income" class="stat-value text-success">₹ 0.00</div>
+              <div class="text-caption text-secondary">Total for this period</div>
+            </div>
+            <div class="card card-span-4">
+              <h2 class="text-h2 mb-2">Expenses</h2>
+              <div id="summary-expenses" class="stat-value text-danger">₹ 0.00</div>
+              <div class="text-caption text-secondary">Total for this period</div>
+            </div>
+            <div class="card card-span-4">
+              <h2 class="text-h2 mb-2">Savings</h2>
+              <div id="summary-savings" class="stat-value text-accent">₹ 0.00</div>
+              <div class="text-caption text-secondary">Net savings</div>
+            </div>
+
+            <!-- Secondary Stats -->
+            <div class="card card-span-4">
+              <h2 class="text-h2 mb-2">Biggest Expense</h2>
+              <div id="summary-biggest" class="stat-value text-primary">₹ 0.00</div>
+            </div>
+            <div class="card card-span-4">
+              <h2 class="text-h2 mb-2">Top Category</h2>
+              <div id="summary-category" class="stat-value text-info">None</div>
+            </div>
+            <div class="card card-span-4">
+              <h2 class="text-h2 mb-2">Transactions</h2>
+              <div id="summary-count" class="stat-value">0</div>
+            </div>
+
+            <!-- Spending by Category Chart Card -->
+            <div class="card card-span-6">
+              <h2 class="text-h2 mb-4">Spending by Category</h2>
+              <div class="chart-container" style="position: relative; height: 350px;">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Income vs Expenses Chart Card -->
+            <div class="card card-span-6">
+              <h2 class="text-h2 mb-4">Income vs Expenses Trend</h2>
+              <div class="chart-container" style="position: relative; height: 350px;">
+                <canvas id="spendingTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+        </section> <!-- page-body -->
+      </section> <!-- page-container -->
+    </main>
+
+    <!-- Script Order (ES Modules Entry) -->
+    <script type="module" src="js/bootstrap.js?v=fix4"></script>
+  </div>
+</body>
+
+</html>
