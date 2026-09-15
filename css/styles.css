@@ -16,6 +16,7 @@
 
 html,
 body {
+<<<<<<< HEAD
   /* min-height (not height) lets the root grow to fit content taller than
      the viewport. A fixed `height: 100%` here — combined with
      overflow-x: hidden forcing overflow-y to auto-compute on both html
@@ -32,6 +33,9 @@ body {
      without capping actual content.
   */
   min-height: 100%;
+=======
+  height: 100%;
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -1759,10 +1763,14 @@ select:focus {
   }
 
   .category-limit-input-wrap {
+<<<<<<< HEAD
     /* 110px clipped the "No limit" placeholder (needs ~54px of text
        space, but only ~48px was left after the currency-symbol padding)
        — widened so the full placeholder/value is always visible. */
     width: 132px;
+=======
+    width: 110px;
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   }
 }
 
@@ -2954,6 +2962,7 @@ input:disabled+.slider {
   .filter-grid .input-group {
     width: 100% !important;
   }
+<<<<<<< HEAD
 }
 /* =====================================================================
    NEW APP SHELL — header + bottom nav design
@@ -3425,3 +3434,6 @@ input:disabled+.slider {
   .balance-hero-amount { font-size: 1.75rem; }
   .quick-action-icon { width: 42px; height: 42px; font-size: 1.1rem; }
 }
+=======
+}
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d

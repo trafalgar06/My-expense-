@@ -1,6 +1,10 @@
 // ========== Reports Page ----------
 import { loadStore, ensurePeriod, getPeriodData } from './storage.js';
+<<<<<<< HEAD
 import { initPeriod, navigatePeriod, setCurrentPeriod, getCurrentPeriod, periodDisplay, fmt, toPeriod } from './utils.js';
+=======
+import { initPeriod, navigatePeriod, periodDisplay, fmt, toPeriod, getCurrentPage } from './utils.js';
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 import { renderCharts } from './charts.js';
 
 // Render monthly summary statistics
@@ -60,6 +64,7 @@ export function initializeReportsPage() {
   const currentPeriod = initPeriod();
   ensurePeriod(currentPeriod);
 
+<<<<<<< HEAD
   // Bind navigation FIRST. Rendering is the part that can fail on
   // external dependencies (Chart.js from a CDN); the month buttons and
   // period header must never be left unbound because a chart broke.
@@ -67,6 +72,12 @@ export function initializeReportsPage() {
 
   renderMonthlySummary(currentPeriod);
   renderCharts(currentPeriod);
+=======
+  renderMonthlySummary(currentPeriod);
+  renderCharts(currentPeriod);
+
+  bindReportsEvents();
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 }
 
 function bindReportsEvents() {
@@ -80,7 +91,14 @@ function bindReportsEvents() {
   if (todayBtn) {
     todayBtn.addEventListener("click", () => {
       const now = new Date();
+<<<<<<< HEAD
       const cp = setCurrentPeriod(toPeriod(now.getFullYear(), now.getMonth() + 1));
+=======
+      const cp = toPeriod(now.getFullYear(), now.getMonth() + 1);
+      const page = getCurrentPage();
+      const key = `period_${page}`;
+      localStorage.setItem(key, cp);
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
       ensurePeriod(cp);
       renderMonthlySummary(cp);
@@ -93,12 +111,33 @@ function bindReportsEvents() {
 
   const periodDisplayEl = document.getElementById("current-period");
   if (periodDisplayEl) {
+<<<<<<< HEAD
     periodDisplayEl.textContent = periodDisplay(getCurrentPeriod());
+=======
+    const page = getCurrentPage();
+    const key = `period_${page}`;
+    const savedPeriod = localStorage.getItem(key);
+    if (savedPeriod) {
+      periodDisplayEl.textContent = periodDisplay(savedPeriod);
+    }
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   }
 }
 
 function shiftMonth(delta) {
+<<<<<<< HEAD
   const cp = navigatePeriod(getCurrentPeriod(), delta);
+=======
+  const page = getCurrentPage();
+  const key = `period_${page}`;
+  let cp = localStorage.getItem(key);
+  if (!cp) {
+    cp = toPeriod(new Date().getFullYear(), new Date().getMonth() + 1);
+  }
+
+  cp = navigatePeriod(cp, delta);
+  localStorage.setItem(key, cp);
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
   ensurePeriod(cp);
   renderMonthlySummary(cp);

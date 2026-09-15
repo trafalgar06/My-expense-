@@ -27,11 +27,14 @@ export function openExpenseModal() {
 export function closeExpenseModal() {
   document.getElementById("add-expense-modal").style.display = "none";
   document.body.style.overflow = "";
+<<<<<<< HEAD
   const warning = document.getElementById("expense-limit-warning");
   if (warning) {
     warning.className = "limit-warning-banner";
     warning.textContent = "";
   }
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 }
 
 export function closeEditExpenseModal() {

@@ -5,6 +5,7 @@
 //            Every pre-existing income/expense transaction is auto-tagged account: "bank"
 //            on migration, and account balances are recalculated from full transaction history.
 
+<<<<<<< HEAD
 import { generateUUID, parsePeriod, toPeriod, safeJSONParse, roundCurrency } from './utils.js';
 
 const STORAGE_KEY = "exp_tracker_v2";
@@ -14,13 +15,23 @@ const SETTINGS_KEY = "exp_tracker_settings";
 // window.store, so backupData()/importData() have to be told about them
 // explicitly or a restore silently drops all limits and recurring rules.
 const SIDE_STORAGE_KEYS = ["categoryLimits", "recurringTransactions", "recurringSkips"];
+=======
+import { generateUUID, parsePeriod, safeJSONParse } from './utils.js';
+
+const STORAGE_KEY = "exp_tracker_v2";
+const SETTINGS_KEY = "exp_tracker_settings";
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
 if (!window.store) window.store = {};
 export let store = window.store;
 
 // Default settings
 const DEFAULT_SETTINGS = {
+<<<<<<< HEAD
   theme: "auto",
+=======
+  theme: "light",
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   currency: "INR",
   defaultPeriod: "last-used",
   cloudSync: false,
@@ -233,9 +244,15 @@ function migrateToAccountsSchema() {
         else bankBalance -= e.amount;
       });
     }
+<<<<<<< HEAD
     window.store.accounts.bank.balance = roundCurrency(bankBalance);
     window.store.accounts.cash.balance = roundCurrency(cashBalance);
     window.store.accounts.savings.balance = roundCurrency(savingsBalance);
+=======
+    window.store.accounts.bank.balance = bankBalance;
+    window.store.accounts.cash.balance = cashBalance;
+    window.store.accounts.savings.balance = savingsBalance;
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   }
 
   if (needsSave) {
@@ -255,11 +272,15 @@ export function adjustAccountBalance(accountKey, delta) {
   if (!window.store.accounts[accountKey]) {
     window.store.accounts[accountKey] = { balance: 0 };
   }
+<<<<<<< HEAD
   // Round after every mutation so tiny binary floating-point errors
   // (e.g. 0.1 + 0.2 !== 0.3) never accumulate across many transactions.
   // Without this, the raw stored balance can drift a fraction of a paisa
   // below the rounded amount actually shown on screen.
   window.store.accounts[accountKey].balance = roundCurrency(window.store.accounts[accountKey].balance + delta);
+=======
+  window.store.accounts[accountKey].balance += delta;
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   saveStore();
 }
 
@@ -279,6 +300,7 @@ export function recordTransfer(fromAccount, toAccount, amount, note) {
   if (amount <= 0 || isNaN(amount)) {
     return { success: false, error: "Invalid amount" };
   }
+<<<<<<< HEAD
 
   const roundedAmount = roundCurrency(amount);
   const sourceBalance = window.store.accounts[fromAccount].balance;
@@ -303,12 +325,24 @@ export function recordTransfer(fromAccount, toAccount, amount, note) {
 
   window.store.accounts[fromAccount].balance = roundCurrency(sourceBalance - amountToMove);
   window.store.accounts[toAccount].balance = roundCurrency(window.store.accounts[toAccount].balance + amountToMove);
+=======
+  if (window.store.accounts[fromAccount].balance < amount) {
+    return { success: false, error: "Insufficient balance in source account" };
+  }
+
+  window.store.accounts[fromAccount].balance -= amount;
+  window.store.accounts[toAccount].balance += amount;
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
   const transfer = {
     id: generateUUID(),
     fromAccount,
     toAccount,
+<<<<<<< HEAD
     amount: amountToMove,
+=======
+    amount,
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
     note: note || "",
     date: new Date().toLocaleDateString("en-CA"),
     timestamp: Date.now()
@@ -328,8 +362,12 @@ export function reconcileCash(actualAmount) {
   }
 
   const currentCash = window.store.accounts.cash.balance;
+<<<<<<< HEAD
   const roundedActual = roundCurrency(actualAmount);
   const difference = roundCurrency(roundedActual - currentCash);
+=======
+  const difference = actualAmount - currentCash;
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
   if (!window.store.transfers) {
     window.store.transfers = [];
@@ -345,12 +383,17 @@ export function reconcileCash(actualAmount) {
     timestamp: Date.now()
   });
 
+<<<<<<< HEAD
   window.store.accounts.cash.balance = roundedActual;
+=======
+  window.store.accounts.cash.balance = actualAmount;
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   saveStore();
 
   return { success: true, difference };
 }
 
+<<<<<<< HEAD
 // ========== Full Backup / Restore ==========
 // categoryLimits and recurringTransactions live in their own raw
 // localStorage keys (not inside window.store), so a naive
@@ -417,13 +460,19 @@ function getCarryOverOpeningBudget(p) {
   return roundCurrency(prevIncome - prevExpenses);
 }
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 export function ensurePeriod(p) {
   if (!window.store.periods) {
     window.store.periods = {};
   }
   if (!window.store.periods[p]) {
     window.store.periods[p] = {
+<<<<<<< HEAD
       budget: getCarryOverOpeningBudget(p),
+=======
+      budget: 0,
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       added: 0,
       expenses: [],
       income: []
@@ -441,6 +490,7 @@ export function ensurePeriod(p) {
   generateRecurringTransactions(p);
 }
 
+<<<<<<< HEAD
 // Occurrences the user has explicitly deleted, as `${templateId}|${date}`.
 // Without this, deleting a generated transaction was pointless: the next
 // ensurePeriod() call regenerated it immediately, so recurring rows simply
@@ -473,6 +523,8 @@ export function removeRecurringTemplate(templateId) {
   localStorage.setItem(RECURRING_SKIP_KEY, JSON.stringify(skips));
 }
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 export function generateRecurringTransactions(targetPeriod) {
   const templates = safeJSONParse("recurringTransactions", []);
   if (templates.length === 0) return;
@@ -484,6 +536,7 @@ export function generateRecurringTransactions(targetPeriod) {
   const firstDateOfPeriod = new Date(year, month - 1, 1);
   const lastDateOfPeriod = new Date(year, month, 0);
 
+<<<<<<< HEAD
   // Never materialize a recurring transaction that hasn't happened yet.
   //
   // ensurePeriod() calls this for whatever month is being viewed, so
@@ -504,6 +557,8 @@ export function generateRecurringTransactions(targetPeriod) {
   // month is already behind us, so the month's own end date is the cap.
   const generateUpTo = lastDateOfPeriod < today ? lastDateOfPeriod : today;
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   function formatDate(d) {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -512,6 +567,7 @@ export function generateRecurringTransactions(targetPeriod) {
   }
 
   let modified = false;
+<<<<<<< HEAD
   const skips = getRecurringSkips();
 
   templates.forEach(tpl => {
@@ -525,6 +581,19 @@ export function generateRecurringTransactions(targetPeriod) {
       for (let day = 1; day <= daysCount; day++) {
         const d = new Date(year, month - 1, day);
         if (d >= startVal && d <= generateUpTo) {
+=======
+
+  templates.forEach(tpl => {
+    const startVal = new Date(tpl.startDate);
+    if (startVal > lastDateOfPeriod) return;
+
+    const dates = [];
+    if (tpl.frequency === "Daily") {
+      const daysCount = lastDateOfPeriod.getDate();
+      for (let day = 1; day <= daysCount; day++) {
+        const d = new Date(year, month - 1, day);
+        if (d >= startVal) {
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
           dates.push(formatDate(d));
         }
       }
@@ -533,7 +602,11 @@ export function generateRecurringTransactions(targetPeriod) {
       while (d < firstDateOfPeriod) {
         d.setDate(d.getDate() + 7);
       }
+<<<<<<< HEAD
       while (d <= generateUpTo) {
+=======
+      while (d <= lastDateOfPeriod) {
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         if (d >= startVal) {
           dates.push(formatDate(d));
         }
@@ -544,14 +617,21 @@ export function generateRecurringTransactions(targetPeriod) {
       const lastDayOfTargetMonth = lastDateOfPeriod.getDate();
       const actualDay = Math.min(targetDay, lastDayOfTargetMonth);
       const d = new Date(year, month - 1, actualDay);
+<<<<<<< HEAD
       if (d >= startVal && d <= generateUpTo) {
+=======
+      if (d >= startVal) {
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         dates.push(formatDate(d));
       }
     }
 
     dates.forEach(dateStr => {
+<<<<<<< HEAD
       // The user deleted this specific occurrence — don't resurrect it.
       if (skips.includes(`${tpl.id}|${dateStr}`)) return;
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       const account = tpl.account || "bank";
       if (tpl.type === "expense") {
         const exists = periodData.expenses.some(e => e.recurringTemplateId === tpl.id && e.date === dateStr);
@@ -619,6 +699,10 @@ window.generateRecurringTransactions = generateRecurringTransactions;
 window.getAccountBalance = getAccountBalance;
 window.adjustAccountBalance = adjustAccountBalance;
 window.recordTransfer = recordTransfer;
+<<<<<<< HEAD
 window.reconcileCash = reconcileCash;
 window.getFullBackupData = getFullBackupData;
 window.restoreFullBackupData = restoreFullBackupData;
+=======
+window.reconcileCash = reconcileCash;
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d

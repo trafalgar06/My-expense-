@@ -15,6 +15,7 @@
   <meta name="theme-color" content="#3b82f6">
 </head>
 
+<<<<<<< HEAD
 <body class="app-shell-body">
   <div id="nav-container"></div>
 
@@ -159,6 +160,169 @@
       </div> <!-- dashboard-grid -->
     </section> <!-- page-body -->
   </main>
+=======
+<body class="has-sidebar">
+  <script>
+    (function () {
+      const isExpanded = localStorage.getItem("sidebarExpanded") !== "false";
+      document.body.classList.add(isExpanded ? "sidebar-expanded" : "sidebar-collapsed");
+    })();
+  </script>
+  <div class="app-layout">
+    <!-- Sidebar container for dynamic insertion -->
+    <div id="sidebar-container"></div>
+
+    <!-- All visible page content must be wrapped inside BOTH wrappers -->
+    <main class="main-content">
+      <section class="container page-container">
+
+        <header class="page-header">
+          <!-- Top area with greeting and buttons -->
+          <div class="top-area">
+            <div>
+              <h1 class="greeting">Good morning, User</h1>
+              <p class="text-body text-secondary mt-2">Manage your spending efficiently</p>
+            </div>
+
+            <div class="button-group">
+              <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                <span class="theme-icon sun"></span>
+                <span class="theme-icon moon"></span>
+              </button>
+              <button id="export-btn" class="btn btn-ghost">
+                Export CSV
+              </button>
+              <button id="change-period-btn" class="btn btn-secondary">
+                Change Period
+              </button>
+            </div>
+          </div>
+
+          <!-- Period Navigation (Moved here) -->
+          <div class="period-selector mt-6 mb-2">
+            <div class="flex items-center gap-3">
+              <button id="prev-month-btn" class="btn btn-ghost btn-icon">
+                ←
+              </button>
+              <h2 id="current-period" class="text-h2">January 2023</h2>
+              <button id="next-month-btn" class="btn btn-ghost btn-icon">
+                →
+              </button>
+            </div>
+            <button id="today-btn" class="btn btn-secondary">
+              Today
+            </button>
+          </div>
+        </header>
+
+        <section class="page-body">
+
+
+          <!-- Cards section -->
+          <div class="dashboard-grid">
+
+            <!-- Cards section -->
+            <div class="cards-section">
+              <!-- Income card (Total period income) -->
+              <div class="income-card dashboard-card card">
+                <h2 class="text-h2 mb-4">Income</h2>
+                <div class="text-caption text-secondary mb-3">TOTAL INCOME THIS PERIOD</div>
+                <div id="income-display" class="stat-value text-success">₹ 0.00</div>
+              </div>
+
+              <!-- Overview card with donut chart -->
+              <div class="overview-card dashboard-card card">
+                <h2 class="text-h2 mb-4">Spend</h2>
+                <div class="text-caption text-secondary mb-3">Spent this period</div>
+                <div id="spent-display" class="stat-value text-danger">₹ 0.00</div>
+              </div>
+
+              <!-- Expense strategy card with bar chart -->
+              <div class="strategy-card dashboard-card card">
+                <h2 class="text-h2 mb-4">Remaining</h2>
+                <div class="text-caption text-secondary mb-3">Bank + Cash, right now</div>
+                <div id="remaining-display" class="stat-value text-accent">₹ 0.00</div>
+              </div>
+
+              <!-- Accounts card: Bank / Cash / Savings breakdown -->
+              <div id="accounts" class="finances-card dashboard-card card accounts-card">
+                <h2 class="text-h2 mb-1">Accounts</h2>
+                <div class="text-caption text-secondary mb-4">Where your money actually is</div>
+
+                <div class="account-row account-row-bank">
+                  <span class="account-row-label">
+                    <span class="account-row-icon">🏦</span>
+                    Bank / Online
+                  </span>
+                  <span id="account-bank-display" class="account-row-value">₹ 0.00</span>
+                </div>
+                <div class="account-row account-row-cash">
+                  <span class="account-row-label">
+                    <span class="account-row-icon">💵</span>
+                    Cash
+                  </span>
+                  <span id="account-cash-display" class="account-row-value">₹ 0.00</span>
+                </div>
+                <div class="account-row account-row-savings">
+                  <span class="account-row-label">
+                    <span class="account-row-icon">🐖</span>
+                    Savings
+                  </span>
+                  <span id="account-savings-display" class="account-row-value">₹ 0.00</span>
+                </div>
+
+                <div class="accounts-actions-primary">
+                  <button id="add-money-btn" class="btn btn-secondary w-full">
+                    Add Income
+                  </button>
+                  <button id="add-expense-btn" class="btn btn-primary w-full">
+                    Add Expense
+                  </button>
+                </div>
+                <div class="accounts-actions-secondary">
+                  <button id="transfer-money-btn" class="btn btn-secondary w-full btn-sm">
+                    ⇄ Transfer
+                  </button>
+                  <button id="reconcile-cash-btn" class="btn btn-secondary w-full btn-sm">
+                    ✓ Reconcile Cash
+                  </button>
+                </div>
+              </div>
+
+              <!-- Category spending limits progress card -->
+              <div id="category-limits-card" class="card" style="grid-column: span 6;">
+                <h2 class="text-h2 mb-4">Category Limits</h2>
+                <div class="text-caption text-secondary mb-3">Monthly category spending progress</div>
+                <div id="category-limits-progress" class="space-y-4" style="display: flex; flex-direction: column; gap: var(--space-4); max-height: 220px; overflow-y: auto;">
+                  <div class="empty-state" style="padding: var(--space-4) 0;">
+                    <p class="text-body text-secondary">No limits configured. Set them in Settings.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Expenses -->
+            <div class="card card-span-12">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-h2">Recent Transactions</h2>
+                <button id="view-all-expenses" class="btn btn-secondary">
+                  View All
+                </button>
+              </div>
+
+              <div id="expense-list-preview" class="expense-list">
+                <div class="empty-state">
+                  <div class="empty-state-icon">📊</div>
+                  <h3 class="text-h3 mb-2">No transactions yet</h3>
+                  <p class="text-body text-secondary">Add your first transaction to get started</p>
+                </div>
+              </div>
+            </div>
+          </div> <!-- dashboard-grid -->
+        </section> <!-- page-body -->
+      </section> <!-- page-container -->
+    </main>
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
     <!-- Add Money Modal -->
     <div id="add-money-modal" class="modal">
@@ -262,8 +426,11 @@
           </select>
         </div>
 
+<<<<<<< HEAD
         <div id="expense-limit-warning" class="limit-warning-banner"></div>
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         <button id="submit-add-expense" class="btn btn-primary w-full">
           Add Expense
         </button>
@@ -309,8 +476,11 @@
           </select>
         </div>
 
+<<<<<<< HEAD
         <div id="edit-expense-limit-warning" class="limit-warning-banner"></div>
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         <button id="submit-edit-expense" class="btn btn-primary w-full">
           Update Expense
         </button>
@@ -426,6 +596,10 @@
     <script>
       // Category dropdowns are now populated by the initialization system
     </script>
+<<<<<<< HEAD
+=======
+  </div>
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 </body>
 
 </html>

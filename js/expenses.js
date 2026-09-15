@@ -1,14 +1,23 @@
 // ========== Expenses ==========
+<<<<<<< HEAD
 import { loadStore, ensurePeriod, getPeriodData, saveStore, adjustAccountBalance, addRecurringSkip, removeRecurringTemplate } from './storage.js';
 import { initPeriod, navigatePeriod, setCurrentPeriod, periodDisplay, fmt, escapeHtml, populateExpenseCategoryDropdown, populateIncomeCategoryDropdown, getCategoryEmoji, getUnifiedCategories, generateUUID, MONTH_NAMES, toPeriod, getCurrentPage, normalizeDate, safeJSONParse, getDefaultDateForPeriod, renderCategoryLimitWarning, getCategoryBadgeColor } from './utils.js';
 
+=======
+import { loadStore, ensurePeriod, getPeriodData, saveStore, adjustAccountBalance } from './storage.js';
+import { initPeriod, navigatePeriod, periodDisplay, fmt, escapeHtml, populateExpenseCategoryDropdown, populateIncomeCategoryDropdown, getCategoryEmoji, getUnifiedCategories, generateUUID, MONTH_NAMES, toPeriod, getCurrentPage, normalizeDate, safeJSONParse, getDefaultDateForPeriod } from './utils.js';
+import { openMoneyModal, closeMoneyModal, openExpenseModal, closeExpenseModal, closeEditExpenseModal, closeEditIncomeModal } from './modal.js';
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
 let currentPeriod = "";
 let expensesFilters = {
   search: "",
   category: "all",
   type: "all",
+<<<<<<< HEAD
   account: "all",
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   minAmount: "",
   maxAmount: ""
 };
@@ -84,6 +93,7 @@ function bindEvents() {
 
       const p = getPeriodData(currentPeriod);
 
+<<<<<<< HEAD
       // Account balances (bank/cash/savings) are cumulative running totals
       // across ALL periods, not per-period figures. Simply replacing this
       // period's expenses/income with empty arrays — without reversing
@@ -92,13 +102,19 @@ function bindEvents() {
       // savings, only cash, so this used to be unrecoverable).
       p.expenses.forEach(expense => {
         adjustAccountBalance(expense.account || "bank", expense.amount);
+=======
+      p.expenses.forEach(expense => {
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         if (window.auditLog) {
           window.auditLog.logDeleteExpense(expense);
         }
       });
 
       p.income.forEach(income => {
+<<<<<<< HEAD
         adjustAccountBalance(income.account || "bank", -income.amount);
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         if (window.auditLog) {
           window.auditLog.logDeleteIncome(income);
         }
@@ -127,7 +143,14 @@ function bindEvents() {
   if (todayBtn) {
     todayBtn.addEventListener("click", () => {
       const now = new Date();
+<<<<<<< HEAD
       currentPeriod = setCurrentPeriod(toPeriod(now.getFullYear(), now.getMonth() + 1));
+=======
+      currentPeriod = toPeriod(now.getFullYear(), now.getMonth() + 1);
+      const page = getCurrentPage();
+      const key = `period_${page}`;
+      localStorage.setItem(key, currentPeriod);
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       ensurePeriod(currentPeriod);
       selectedDateFilter = null;
       renderExpenses();
@@ -150,10 +173,14 @@ function bindEvents() {
     toggleAdvancedBtn.addEventListener("click", () => {
       const isCollapsed = advancedFiltersSection.style.maxHeight === "0px" || advancedFiltersSection.style.maxHeight === "" || advancedFiltersSection.style.maxHeight === "0";
       if (isCollapsed) {
+<<<<<<< HEAD
         // Size to the content's real height rather than a hardcoded cap —
         // see the identical fix in settings.js for why a fixed max-height
         // here is a trap the moment a filter row is added or removed.
         advancedFiltersSection.style.maxHeight = advancedFiltersSection.scrollHeight + "px";
+=======
+        advancedFiltersSection.style.maxHeight = "500px";
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         advancedFiltersSection.style.opacity = "1";
         advancedFiltersSection.style.paddingTop = "var(--space-4)";
         advancedFiltersSection.style.marginTop = "var(--space-4)";
@@ -245,7 +272,10 @@ function bindEvents() {
   const searchInput = document.getElementById("filter-search");
   const categorySelect = document.getElementById("filter-category");
   const typeSelect = document.getElementById("filter-type");
+<<<<<<< HEAD
   const accountSelect = document.getElementById("filter-account");
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   const minAmountInput = document.getElementById("filter-min-amount");
   const maxAmountInput = document.getElementById("filter-max-amount");
   const resetBtn = document.getElementById("reset-filters-btn");
@@ -271,6 +301,7 @@ function bindEvents() {
     });
   }
 
+<<<<<<< HEAD
   if (accountSelect) {
     accountSelect.addEventListener("change", (e) => {
       expensesFilters.account = e.target.value;
@@ -278,6 +309,8 @@ function bindEvents() {
     });
   }
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   if (minAmountInput) {
     minAmountInput.addEventListener("input", (e) => {
       expensesFilters.minAmount = e.target.value;
@@ -298,7 +331,10 @@ function bindEvents() {
         search: "",
         category: "all",
         type: "all",
+<<<<<<< HEAD
         account: "all",
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         minAmount: "",
         maxAmount: ""
       };
@@ -306,7 +342,10 @@ function bindEvents() {
       if (searchInput) searchInput.value = "";
       if (categorySelect) categorySelect.value = "all";
       if (typeSelect) typeSelect.value = "all";
+<<<<<<< HEAD
       if (accountSelect) accountSelect.value = "all";
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       if (minAmountInput) minAmountInput.value = "";
       if (maxAmountInput) maxAmountInput.value = "";
       renderExpenses();
@@ -369,8 +408,11 @@ function openAddExpenseModal() {
           </select>
         </div>
 
+<<<<<<< HEAD
         <div id="expense-limit-warning" class="limit-warning-banner"></div>
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         <button id="submit-add-expense" class="btn btn-primary w-full">
           Add Expense
         </button>
@@ -393,6 +435,7 @@ function openAddExpenseModal() {
     });
   }
 
+<<<<<<< HEAD
   // Live category-limit warning as amount/category are filled in.
   const expenseAmountInput = document.getElementById("expense-amount");
   const expenseLimitWarning = document.getElementById("expense-limit-warning");
@@ -405,6 +448,8 @@ function openAddExpenseModal() {
     expenseAmountInput.addEventListener("input", updateWarning);
   }
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   document.getElementById("close-add-expense").addEventListener("click", closeAddExpenseModal);
   document.getElementById("submit-add-expense").addEventListener("click", addExpense);
 
@@ -447,10 +492,17 @@ function addExpense() {
   const frequency = isRecurring && frequencySelect ? frequencySelect.value : "";
 
   let templateId = "";
+<<<<<<< HEAD
   let pendingTemplate = null;
   if (isRecurring) {
     templateId = generateUUID();
     pendingTemplate = {
+=======
+  if (isRecurring) {
+    templateId = generateUUID();
+    const templates = safeJSONParse("recurringTransactions", []);
+    templates.push({
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       id: templateId,
       type: "expense",
       name: name,
@@ -459,7 +511,12 @@ function addExpense() {
       frequency: frequency,
       startDate: selectedDate,
       account: account
+<<<<<<< HEAD
     };
+=======
+    });
+    localStorage.setItem("recurringTransactions", JSON.stringify(templates));
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   }
 
   // The transaction always belongs to the period currently being viewed —
@@ -481,6 +538,7 @@ function addExpense() {
   getPeriodData(currentPeriod).expenses.push(newExpense);
   adjustAccountBalance(account, -amt);
 
+<<<<<<< HEAD
   // Persist the template only AFTER the first occurrence is in place.
   //
   // getPeriodData() -> ensurePeriod() -> generateRecurringTransactions().
@@ -496,6 +554,8 @@ function addExpense() {
     localStorage.setItem("recurringTransactions", JSON.stringify(templates));
   }
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   closeAddExpenseModal();
   saveStore();
   renderExpenses();
@@ -625,10 +685,17 @@ function addIncome() {
   const frequency = isRecurring && frequencySelect ? frequencySelect.value : "";
 
   let templateId = "";
+<<<<<<< HEAD
   let pendingTemplate = null;
   if (isRecurring) {
     templateId = generateUUID();
     pendingTemplate = {
+=======
+  if (isRecurring) {
+    templateId = generateUUID();
+    const templates = safeJSONParse("recurringTransactions", []);
+    templates.push({
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       id: templateId,
       type: "income",
       name: source,
@@ -637,7 +704,12 @@ function addIncome() {
       frequency: frequency,
       startDate: selectedDate,
       account: account
+<<<<<<< HEAD
     };
+=======
+    });
+    localStorage.setItem("recurringTransactions", JSON.stringify(templates));
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   }
 
   // The transaction always belongs to the period currently being viewed —
@@ -659,6 +731,7 @@ function addIncome() {
   p.added += amt;
   adjustAccountBalance(account, amt);
 
+<<<<<<< HEAD
   // Save the template only after the first occurrence exists, so the
   // recurring generator's duplicate check can see it and skip re-creating
   // it. See the matching comment in addExpense().
@@ -668,6 +741,8 @@ function addIncome() {
     localStorage.setItem("recurringTransactions", JSON.stringify(templates));
   }
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   closeAddIncomeModal();
   saveStore();
   renderExpenses();
@@ -730,6 +805,7 @@ function renderExpenses() {
     all = all.filter(t => t.type === expensesFilters.type);
   }
 
+<<<<<<< HEAD
   // Apply account filter (bank/cash/savings). Transactions saved before
   // the accounts model existed, or with no explicit account, default to
   // "bank" — matching the same fallback used everywhere else balances
@@ -738,6 +814,8 @@ function renderExpenses() {
     all = all.filter(t => (t.account || "bank") === expensesFilters.account);
   }
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   // Apply amount filters
   if (expensesFilters.minAmount !== "") {
     all = all.filter(t => t.amount >= Number(expensesFilters.minAmount));
@@ -798,6 +876,7 @@ function renderExpenses() {
     const isRecurring = !!t.recurringTemplateId;
     const accountIcon = t.account === "cash" ? "💵" : t.account === "savings" ? "🐖" : "🏦";
     const accountLabel = t.account === "cash" ? "Cash" : t.account === "savings" ? "Savings" : "Bank / Online";
+<<<<<<< HEAD
     const badgeColor = getCategoryBadgeColor(category);
     row.innerHTML = `
       <div class="expense-details">
@@ -807,6 +886,13 @@ function renderExpenses() {
           <span class="text-caption text-tertiary">
             ${escapeHtml(category)} • ${new Date(t.date).toLocaleDateString()}
           </span>
+=======
+    row.innerHTML = `
+      <div class="expense-details">
+        <div class="text-body font-medium">${escapeHtml(icon)} ${escapeHtml(name)}${isRecurring ? ' 🔁' : ''} <span title="${accountLabel}" style="font-size: 0.85em;">${accountIcon}</span></div>
+        <div class="text-caption text-tertiary">
+          ${escapeHtml(category)} • ${new Date(t.date).toLocaleDateString()}
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         </div>
       </div>
       <div class="expense-actions">
@@ -825,6 +911,7 @@ function renderExpenses() {
       const type = this.getAttribute("data-type");
       const index = parseInt(this.getAttribute("data-index"));
 
+<<<<<<< HEAD
       const target = type === "income" ? p.income[index] : p.expenses[index];
       if (!target) return;
 
@@ -845,6 +932,8 @@ function renderExpenses() {
         }
       }
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       if (type === "income") {
         const deletedIncome = p.income[index];
         p.added -= deletedIncome.amount;
@@ -952,7 +1041,15 @@ function renderInlineCalendar() {
       selectedDateFilter = this.getAttribute("data-date");
       
       // Update currentPeriod to match selected date's period
+<<<<<<< HEAD
       currentPeriod = setCurrentPeriod(selectedDateFilter.substring(0, 7));
+=======
+      const newPeriod = selectedDateFilter.substring(0, 7);
+      currentPeriod = newPeriod;
+      const page = getCurrentPage();
+      const key = `period_${page}`;
+      localStorage.setItem(key, currentPeriod);
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       ensurePeriod(currentPeriod);
 
       popup.style.display = "none";
@@ -992,6 +1089,7 @@ export function initializeExpensesPage() {
     renderExpenses();
     updateGreeting();
     setInterval(updateGreeting, 60000);
+<<<<<<< HEAD
 
     // Honors the bottom-nav FAB when it hands off from a page that has no
     // Add Expense modal of its own (Report/Settings) — see sidebar.js.
@@ -1000,6 +1098,8 @@ export function initializeExpensesPage() {
       const addBtn = document.getElementById("add-expense-btn");
       if (addBtn) addBtn.click();
     }
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   }
 }
 

@@ -1,6 +1,10 @@
 // ========== Dashboard ==========
 import { loadStore, ensurePeriod, getPeriodData, saveStore, getAccountBalance, adjustAccountBalance, recordTransfer, reconcileCash } from './storage.js';
+<<<<<<< HEAD
 import { initPeriod, navigatePeriod, setCurrentPeriod, toPeriod, periodDisplay, fmt, escapeHtml, updateGreeting, populateExpenseCategoryDropdown, renderMonthlySummaryUtils, generateUUID, normalizeDate, safeJSONParse, getDefaultDateForPeriod, renderCategoryLimitWarning } from './utils.js';
+=======
+import { initPeriod, navigatePeriod, periodDisplay, fmt, escapeHtml, updateGreeting, populateExpenseCategoryDropdown, renderMonthlySummaryUtils, generateUUID, normalizeDate, safeJSONParse, getDefaultDateForPeriod } from './utils.js';
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 import { renderCharts } from './charts.js';
 import { openMoneyModal, closeMoneyModal, openExpenseModal, closeExpenseModal, closeEditExpenseModal, closeEditIncomeModal } from './modal.js';
 
@@ -16,6 +20,7 @@ export function initializeDashboard() {
     ensurePeriod(currentPeriod);
     bindEvents();
 
+<<<<<<< HEAD
     // Default the Add Income/Add Expense date fields to the viewed period
     // (like every other add-transaction entry point in the app), not to
     // the raw real-world date. Dashboard remembers its own last-viewed
@@ -26,6 +31,10 @@ export function initializeDashboard() {
     // on Transactions/Reports, which had already moved on to the real
     // current month.
     const safeDate = getDefaultDateForPeriod();
+=======
+    const d = new Date();
+    const safeDate = d.toLocaleDateString("en-CA");
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
     const addMoneyDate = document.getElementById("add-money-date");
     const expenseDate = document.getElementById("expense-date");
@@ -39,9 +48,12 @@ export function initializeDashboard() {
     }
 
     renderDashboard();
+<<<<<<< HEAD
     // Charts depend on a CDN-loaded library, so keep them last and
     // isolated — a charting failure must not stop the greeting or leave
     // the rest of the dashboard half-initialized.
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
     renderCharts(currentPeriod);
     updateGreeting();
   }
@@ -73,6 +85,7 @@ function bindEvents() {
     });
   }
 
+<<<<<<< HEAD
   // Live category-limit warning as the person fills out the Add Expense
   // form, instead of only surfacing limits retrospectively on a progress
   // bar elsewhere on the Dashboard.
@@ -102,12 +115,15 @@ function bindEvents() {
     editExpenseAmountInput.addEventListener("input", updateEditWarning);
   }
 
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   const closeAddMoneyBtn = document.getElementById("close-add-money");
   if (closeAddMoneyBtn) closeAddMoneyBtn.addEventListener("click", closeMoneyModal);
 
   const closeAddExpenseBtn = document.getElementById("close-add-expense");
   if (closeAddExpenseBtn) closeAddExpenseBtn.addEventListener("click", closeExpenseModal);
 
+<<<<<<< HEAD
   // closeEditExpenseModal()/closeEditIncomeModal() (in modal.js) only null
   // out window.editingExpenseIndex/window.editingIncomeIndex, but
   // updateExpense()/updateIncome() below guard on the module-scoped
@@ -130,6 +146,13 @@ function bindEvents() {
       editingIncomeIndex = null;
     });
   }
+=======
+  const closeEditExpenseBtn = document.getElementById("close-edit-expense");
+  if (closeEditExpenseBtn) closeEditExpenseBtn.addEventListener("click", closeEditExpenseModal);
+
+  const closeEditIncomeBtn = document.getElementById("close-edit-income");
+  if (closeEditIncomeBtn) closeEditIncomeBtn.addEventListener("click", closeEditIncomeModal);
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
   const submitAddMoneyBtn = document.getElementById("submit-add-money");
   if (submitAddMoneyBtn) submitAddMoneyBtn.addEventListener("click", addExtraIncome);
@@ -153,10 +176,14 @@ function bindEvents() {
   if (todayBtn) {
     todayBtn.addEventListener("click", () => {
       const now = new Date();
+<<<<<<< HEAD
       // Persist it. This previously only updated the in-memory variable,
       // so jumping to "Today" was forgotten the moment you navigated
       // away or reloaded — the page came back on the old month.
       currentPeriod = setCurrentPeriod(toPeriod(now.getFullYear(), now.getMonth() + 1));
+=======
+      currentPeriod = toPeriod(now.getFullYear(), now.getMonth() + 1);
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       ensurePeriod(currentPeriod);
       renderDashboard();
       renderMonthlySummaryUtils(currentPeriod);
@@ -427,6 +454,7 @@ function renderDashboard() {
       const isRecurring = !!transaction.recurringTemplateId;
       const accountIcon = transaction.account === "cash" ? "💵" : transaction.account === "savings" ? "🐖" : "🏦";
       const accountLabel = transaction.account === "cash" ? "Cash" : transaction.account === "savings" ? "Savings" : "Bank / Online";
+<<<<<<< HEAD
       const badgeColor = window.getCategoryBadgeColor ? window.getCategoryBadgeColor(transaction.category || "Other") : "#E0F2FE";
       row.innerHTML = `
       <div class="recent-transaction-info" style="display:flex; align-items:center; gap: var(--space-3);">
@@ -435,6 +463,12 @@ function renderDashboard() {
           <div class="text-body font-medium tx-name-row">${escapeHtml(name)}${isRecurring ? ' 🔁' : ''} <span title="${accountLabel}" style="font-size: 0.85em;">${accountIcon}</span></div>
           <div class="text-body-sm text-tertiary">${new Date(transaction.date).toLocaleDateString()}</div>
         </div>
+=======
+      row.innerHTML = `
+      <div class="recent-transaction-info">
+        <div class="text-body font-medium">${escapeHtml(icon)} ${escapeHtml(name)}${isRecurring ? ' 🔁' : ''} <span title="${accountLabel}" style="font-size: 0.85em;">${accountIcon}</span></div>
+        <div class="text-caption">${new Date(transaction.date).toLocaleDateString()}</div>
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       </div>
       <div class="recent-transaction-actions">
         <div class="${isIncome ? 'text-success' : 'text-danger'}">
@@ -700,11 +734,14 @@ function openEditExpenseModal(index) {
   if (editAccountInput) editAccountInput.value = expense.account || "bank";
   document.getElementById("edit-expense-modal").style.display = "flex";
   document.body.style.overflow = "hidden";
+<<<<<<< HEAD
 
   const editExpenseLimitWarning = document.getElementById("edit-expense-limit-warning");
   if (editExpenseLimitWarning) {
     renderCategoryLimitWarning(editExpenseLimitWarning, getPeriodData(currentPeriod).expenses, expense.category || "Other", expense.amount, index);
   }
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 }
 
 function updateExpense() {
@@ -713,7 +750,11 @@ function updateExpense() {
   const name = document.getElementById("edit-expense-name").value.trim();
   const category = document.getElementById("edit-expense-category").value;
   const amt = Number(document.getElementById("edit-expense-amount").value);
+<<<<<<< HEAD
   const dateInput = document.getElementById("edit-expense-date");
+=======
+  const dateInput = document.getElementById("edit-edit-expense-date") || document.getElementById("edit-expense-date");
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   const accountInput = document.getElementById("edit-expense-account");
 
   if (!name) {

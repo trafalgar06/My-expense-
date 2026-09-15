@@ -53,6 +53,7 @@ function toggleChartPlaceholder(canvasId, showPlaceholder, message = "No data av
   }
 }
 
+<<<<<<< HEAD
 // Returns just the currency symbol for the currently selected currency,
 // for compact axis ticks (fmt() would add thousands separators/decimals,
 // which is too busy for a Y axis).
@@ -99,6 +100,13 @@ export function renderCharts(period) {
     console.error("Failed to render spending trend chart:", e);
     toggleChartPlaceholder('spendingTrendChart', true, "Chart could not be displayed");
   }
+=======
+// Render all charts
+export function renderCharts(period) {
+  if (!period) period = initPeriod();
+  renderCategoryPieChart(period);
+  renderSpendingTrendChart(period);
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 }
 
 // Render category pie chart (Doughnut)
@@ -108,10 +116,13 @@ export function renderCategoryPieChart(period) {
   const ctx = document.getElementById('categoryChart');
 
   if (!ctx) return;
+<<<<<<< HEAD
   if (!isChartLibraryAvailable()) {
     toggleChartPlaceholder('categoryChart', true, "Charts unavailable offline");
     return;
   }
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
   if (chartInstances.categoryChart) {
     chartInstances.categoryChart.destroy();
@@ -216,10 +227,13 @@ export function renderSpendingTrendChart(period) {
   const ctx = document.getElementById('spendingTrendChart');
 
   if (!ctx) return;
+<<<<<<< HEAD
   if (!isChartLibraryAvailable()) {
     toggleChartPlaceholder('spendingTrendChart', true, "Charts unavailable offline");
     return;
   }
+=======
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
   if (chartInstances.spendingTrendChart) {
     chartInstances.spendingTrendChart.destroy();
@@ -335,7 +349,11 @@ export function renderSpendingTrendChart(period) {
           ticks: {
             color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim(),
             callback: function (value) {
+<<<<<<< HEAD
               return getCurrentCurrencySymbol() + value;
+=======
+              return '₹' + value;
+>>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
             }
           },
           grid: {
