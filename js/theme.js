@@ -1,5 +1,4 @@
 // ========== Theme Management ==========
-<<<<<<< HEAD
 //
 // THEME_STORAGE_KEY stores the user's PREFERENCE: 'light' | 'dark' | 'auto'.
 // The <html data-theme> attribute always holds the RESOLVED value actually
@@ -70,19 +69,6 @@ export function initTheme() {
       darkMediaQuery.addListener(onSystemThemeChange); // Safari <14
     }
   }
-=======
-const ACCENT_STORAGE_KEY = 'exp_tracker_accent';
-const THEME_STORAGE_KEY = 'exp_tracker_theme';
-
-// Initialize theme on page load
-export function initTheme() {
-  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-  setTheme(theme, false);
-  initAccent();
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 }
 
 export function initAccent() {
@@ -95,7 +81,6 @@ export function setAccent(color) {
   localStorage.setItem(ACCENT_STORAGE_KEY, color);
 }
 
-<<<<<<< HEAD
 // Sets the theme PREFERENCE ('light' | 'dark' | 'auto') from any entry
 // point (Settings page buttons, sidebar quick-toggle, cross-tab sync) and
 // keeps every source of truth — localStorage, the painted attribute, and
@@ -126,36 +111,6 @@ export function toggleTheme() {
 }
 
 // Get current effective (painted) theme
-=======
-// Set theme with optional transition
-export function setTheme(theme, withTransition = true) {
-  const root = document.documentElement;
-
-  // Disable transitions temporarily if needed
-  if (!withTransition) {
-    root.style.setProperty('--transition-theme', 'none');
-  }
-
-  root.setAttribute('data-theme', theme);
-  localStorage.setItem(THEME_STORAGE_KEY, theme);
-
-  // Re-enable transitions after a brief delay
-  if (!withTransition) {
-    setTimeout(() => {
-      root.style.removeProperty('--transition-theme');
-    }, 50);
-  }
-}
-
-// Toggle between light and dark theme
-export function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  setTheme(newTheme, true);
-}
-
-// Get current theme
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 export function getCurrentTheme() {
   return document.documentElement.getAttribute('data-theme') || 'light';
 }
@@ -168,18 +123,11 @@ window.toggleTheme = toggleTheme;
 window.getCurrentTheme = getCurrentTheme;
 window.setAccent = setAccent;
 window.setTheme = setTheme;
-<<<<<<< HEAD
 window.resolveTheme = resolveTheme;
-=======
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
 // Listen for storage changes (cross-tab synchronization)
 window.addEventListener('storage', (e) => {
   if (e.key === THEME_STORAGE_KEY) {
-<<<<<<< HEAD
     paintTheme(resolveTheme(e.newValue || 'auto'), false);
-=======
-    setTheme(e.newValue, false);
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   }
 });

@@ -39,18 +39,9 @@
 
   <script type="module" src="js/bootstrap.js?v=fix4"></script>
   <script>
-<<<<<<< HEAD
     // Redirect to dashboard page. The viewed period is seeded by
     // bootstrap.js via getCurrentPeriod() (one shared key for the whole
     // app), so there's nothing to set up here.
-=======
-    // Redirect to dashboard page
-    const today = new Date();
-    const todayPeriod = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
-    if (!localStorage.getItem('period_dashboard')) {
-      localStorage.setItem('period_dashboard', todayPeriod);
-    }
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
     setTimeout(function () {
       window.location.href = 'dashboard.html';
     }, 100);

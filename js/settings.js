@@ -1,9 +1,5 @@
 // ========== Settings Page Logic ----------
-<<<<<<< HEAD
 import { loadStore, saveStore, saveSettings, getFullBackupData, restoreFullBackupData } from './storage.js';
-=======
-import { loadStore, saveStore, saveSettings } from './storage.js';
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 import { getUnifiedCategories, getCategoryEmoji, CATEGORY_LIST, escapeHtml, safeJSONParse } from './utils.js';
 
 // Initialize settings page (called from HTML)
@@ -38,7 +34,6 @@ function loadCurrentSettings() {
     }
   }
 
-<<<<<<< HEAD
   // Reflect the stored preference in the toggle on load — without this,
   // the checkbox always renders unchecked even when Carry Over is already
   // enabled in window.store.settings, since nothing set its initial state.
@@ -47,8 +42,6 @@ function loadCurrentSettings() {
     carryToggle.checked = !!settings.carryOverEnabled;
   }
 
-=======
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   renderCategorySettings();
 }
 
@@ -116,7 +109,6 @@ function bindSettingsEvents() {
     toggleBtn.addEventListener('click', () => {
       const isCollapsed = content.style.maxHeight === '0px' || content.style.maxHeight === '' || content.style.maxHeight === '0';
       if (isCollapsed) {
-<<<<<<< HEAD
         // Size to the content's real height rather than a hardcoded cap.
         // A fixed max-height (previously 300px) combined with this
         // container's overflow:hidden silently clipped and made
@@ -124,9 +116,6 @@ function bindSettingsEvents() {
         // happened once the Carry Over Balance toggle brought this
         // section's real height (576px) past the old 300px ceiling.
         content.style.maxHeight = content.scrollHeight + 'px';
-=======
-        content.style.maxHeight = '300px';
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
         content.style.opacity = '1';
         content.style.marginTop = 'var(--space-4)';
         arrow.style.transform = 'rotate(180deg)';
@@ -237,7 +226,6 @@ function bindSettingsEvents() {
 }
 
 function updateTheme(theme) {
-<<<<<<< HEAD
   // theme.js's setTheme() is now the single source of truth: it resolves
   // 'auto' live (instead of freezing it), persists the raw preference, and
   // syncs window.store.settings.theme + audit logging itself — so this
@@ -252,29 +240,6 @@ function updateTheme(theme) {
   }
 
   updateThemeButtons(theme);
-=======
-  const oldTheme = window.store.settings.theme || 'auto';
-  window.store.settings.theme = theme;
-  saveStore();
-
-  let effectiveTheme = theme;
-  if (theme === 'auto') {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    effectiveTheme = prefersDark ? 'dark' : 'light';
-  }
-
-  if (window.setTheme) {
-    window.setTheme(effectiveTheme, true);
-  } else {
-    document.documentElement.setAttribute('data-theme', effectiveTheme);
-  }
-
-  updateThemeButtons(theme);
-
-  if (window.auditLog) {
-    window.auditLog.logThemeChange(oldTheme, theme);
-  }
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 }
 
 function updateThemeButtons(theme) {
@@ -327,14 +292,10 @@ function saveSettingsLocally() {
 }
 
 function backupData() {
-<<<<<<< HEAD
   // Includes periods/settings/accounts/transfers (window.store) AND
   // categoryLimits + recurringTransactions, which live outside window.store
   // in their own localStorage keys. See getFullBackupData() in storage.js.
   const data = JSON.stringify(getFullBackupData(), null, 2);
-=======
-  const data = JSON.stringify(window.store, null, 2);
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   const blob = new Blob([data], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -348,22 +309,12 @@ function importData(file) {
   reader.onload = function (e) {
     try {
       const data = JSON.parse(e.target.result);
-<<<<<<< HEAD
       const result = restoreFullBackupData(data);
       if (result.success) {
         alert('Data imported successfully! The page will now reload.');
         window.location.reload();
       } else {
         throw new Error(result.error || 'Invalid backup file');
-=======
-      if (data.periods && data.settings) {
-        window.store = data;
-        saveStore();
-        alert('Data imported successfully! The page will now reload.');
-        window.location.reload();
-      } else {
-        throw new Error('Invalid backup file');
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
       }
     } catch (err) {
       alert('Error importing data: ' + err.message);

@@ -14,7 +14,6 @@
   <meta name="theme-color" content="#3b82f6">
 </head>
 
-<<<<<<< HEAD
 <body class="app-shell-body">
   <div id="nav-container"></div>
 
@@ -59,63 +58,6 @@
     </header>
 
     <section class="page-body">
-=======
-<body class="has-sidebar">
-  <script>
-    (function () {
-      const isExpanded = localStorage.getItem("sidebarExpanded") !== "false";
-      document.body.classList.add(isExpanded ? "sidebar-expanded" : "sidebar-collapsed");
-    })();
-  </script>
-  <div class="app-layout">
-    <!-- Sidebar container for dynamic insertion -->
-    <div id="sidebar-container"></div>
-
-    <!-- All visible page content must be wrapped inside BOTH wrappers -->
-    <main class="main-content">
-      <section class="container page-container">
-
-        <header class="page-header">
-          <!-- Top area with greeting and buttons -->
-          <div class="top-area">
-            <div>
-              <h1 class="greeting">💸 Transactions</h1>
-              <p class="text-body text-secondary mt-2">Track and manage your income and expenses</p>
-            </div>
-            <div class="button-group flex items-center gap-2" style="position: relative;">
-              <button id="calendar-btn" class="btn btn-secondary btn-icon" title="Filter by date" style="font-size: 20px; padding: 8px 12px; height: 42px;">📅</button>
-              <div id="calendar-popup" class="card" style="display: none; position: fixed; z-index: 1000; width: min(320px, calc(100vw - 32px)); padding: var(--space-4); background: var(--bg-primary); border: 1.5px solid var(--border-primary); box-shadow: var(--shadow-lg); border-radius: var(--radius-2xl);">
-                <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
-                  <button id="cal-prev-month" class="btn btn-ghost btn-icon" style="padding: 4px; font-size: 14px; min-width: auto; height: auto;" type="button">←</button>
-                  <h3 id="calendar-title" class="text-h3" style="margin: 0; font-size: 16px; color: var(--text-primary);"></h3>
-                  <button id="cal-next-month" class="btn btn-ghost btn-icon" style="padding: 4px; font-size: 14px; min-width: auto; height: auto;" type="button">→</button>
-                </div>
-                <div id="calendar-popup-body"></div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        <section class="page-body">
-
-
-
-          <!-- Period Display -->
-          <div class="period-selector card card-span-12">
-            <div class="flex items-center gap-3">
-              <button id="prev-month-btn" class="btn btn-ghost btn-icon">
-                ←
-              </button>
-              <h2 id="current-period" class="text-h2">January 2023</h2>
-              <button id="next-month-btn" class="btn btn-ghost btn-icon">
-                →
-              </button>
-            </div>
-            <button id="today-btn" class="btn btn-secondary">
-              Today
-            </button>
-          </div>
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
 
 
@@ -137,7 +79,6 @@
                 </select>
               </div>
 
-<<<<<<< HEAD
               <div class="input-group">
                 <label for="filter-account" class="input-label">Account</label>
                 <select id="filter-account" class="input-field">
@@ -148,8 +89,6 @@
                 </select>
               </div>
 
-=======
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
               <div class="input-group flex items-end">
                 <button id="toggle-advanced-btn" class="btn btn-secondary w-full" type="button" style="height: 42px;">
                   Advanced Filters ▾
@@ -222,13 +161,7 @@
             </div>
           </div>
         </section> <!-- page-body -->
-<<<<<<< HEAD
     </main>
-=======
-      </section> <!-- page-container -->
-    </main>
-  </div> <!-- app-layout -->
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
     <!-- Script Order (ES Modules Entry) -->
     <script type="module" src="js/bootstrap.js?v=fix4"></script>

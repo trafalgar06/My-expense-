@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 const CACHE_VERSION = 'v17';
-=======
-const CACHE_VERSION = 'v12';
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 const CACHE_NAME = 'denarotrack-' + CACHE_VERSION;
 const ASSETS_TO_CACHE = [
     '/',

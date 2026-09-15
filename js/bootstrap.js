@@ -12,10 +12,7 @@ import './modal.js';
 import './charts.js';
 
 import { loadStore } from './storage.js';
-<<<<<<< HEAD
 import { getCurrentPeriod } from './utils.js';
-=======
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 import { initializeDashboard } from './dashboard.js';
 import { initializeExpensesPage } from './expenses.js';
 import { initializeReportsPage } from './reports.js';
@@ -24,22 +21,10 @@ import { initializeSettingsPage } from './settings.js';
 function bootstrap() {
   console.log('Bootstrap: Initializing application as ES Modules...');
 
-<<<<<<< HEAD
   // Seed/normalize the single shared viewed period. getCurrentPeriod()
   // handles defaulting to today's month and migrating the old per-page
   // period_* keys, so every page opens on the same month.
   getCurrentPeriod();
-=======
-  // Auto-set current period to today's month/year if none is stored
-  const today = new Date();
-  const todayPeriod = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
-  ['dashboard', 'expenses', 'reports', 'settings'].forEach(p => {
-    const key = `period_${p}`;
-    if (!localStorage.getItem(key)) {
-      localStorage.setItem(key, todayPeriod);
-    }
-  });
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
   const path = window.location.pathname;
   const page = path.split("/").pop();
@@ -111,10 +96,5 @@ window.addEventListener('beforeinstallprompt', (e) => {
 window.addEventListener('appinstalled', () => {
   console.log('PWA: App installed');
   window.installPrompt = null;
-<<<<<<< HEAD
   document.querySelectorAll('.install-app-btn').forEach(btn => btn.classList.add('hidden'));
-=======
-  const btn = document.getElementById('install-app-btn');
-  if (btn) btn.classList.add('hidden');
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 });

@@ -55,7 +55,6 @@ export function parsePeriod(p) {
 export function getCurrentPage() {
   const path = window.location.pathname;
   const page = path.split('/').pop().replace('.html', '') || 'dashboard';
-<<<<<<< HEAD
   const pageMap = {
     'dashboard': 'dashboard',
     'index': 'dashboard',
@@ -63,14 +62,6 @@ export function getCurrentPage() {
     'report': 'reports',
     'reports': 'reports',
     'setting': 'settings',
-=======
-  // Map to known page names
-  const pageMap = {
-    'dashboard': 'dashboard',
-    'expenses': 'expenses',
-    'reports': 'reports',
-    'income': 'income',
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
     'settings': 'settings'
   };
   return pageMap[page] || 'dashboard';
@@ -92,7 +83,6 @@ export function fmt(n) {
   });
 }
 
-<<<<<<< HEAD
 // Rounds a number to 2 decimal places, correcting for classic binary
 // floating-point drift (e.g. 0.1 + 0.2 = 0.30000000000000004). Every
 // place that mutates a running account balance should pass its result
@@ -173,8 +163,6 @@ export function getCategoryBadgeColor(category) {
   return CATEGORY_BADGE_COLORS[hash % CATEGORY_BADGE_COLORS.length];
 }
 
-=======
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 export function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, m => ({
     "&": "&amp;",
@@ -212,13 +200,7 @@ export function updateGreeting() {
 export function renderMonthlySummaryUtils(period) {
   // Make sure period is initialized
   if (!period) {
-<<<<<<< HEAD
     period = getCurrentPeriod();
-=======
-    const page = getCurrentPage();
-    const key = `period_${page}`;
-    period = localStorage.getItem(key) || toPeriod(new Date().getFullYear(), new Date().getMonth() + 1);
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
   }
 
   // getPeriodData comes from storage.js, but since it's global or imported, we can reference it
@@ -269,7 +251,6 @@ export function renderMonthlySummaryUtils(period) {
   if (categoryEl) categoryEl.textContent = topCategory;
 }
 
-<<<<<<< HEAD
 // ========== Viewed Period (shared across every page) ==========
 // ONE key for the whole app, not one per page.
 //
@@ -322,34 +303,13 @@ export function setCurrentPeriod(period) {
 // Consistent period initialization across modules
 export function initPeriod() {
   return getCurrentPeriod();
-=======
-// Consistent period initialization across modules
-export function initPeriod() {
-  const page = getCurrentPage();
-  const key = `period_${page}`;
-  let currentPeriod = localStorage.getItem(key);
-  if (!currentPeriod) {
-    currentPeriod = toPeriod(new Date().getFullYear(), new Date().getMonth() + 1);
-    localStorage.setItem(key, currentPeriod);
-  }
-  return currentPeriod;
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 }
 
 // Consistent period navigation across modules
 export function navigatePeriod(currentPeriod, delta) {
   const { year, month } = parsePeriod(currentPeriod);
   const d = new Date(year, month - 1 + delta, 1);
-<<<<<<< HEAD
   return setCurrentPeriod(toPeriod(d.getFullYear(), d.getMonth() + 1));
-=======
-  const newPeriod = toPeriod(d.getFullYear(), d.getMonth() + 1);
-  // Use page-specific key
-  const page = getCurrentPage();
-  const key = `period_${page}`;
-  localStorage.setItem(key, newPeriod);
-  return newPeriod;
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 }
 
 export function getUnifiedCategories() {
@@ -437,27 +397,16 @@ export function safeJSONParse(key, fallback) {
 // the wrong month's records.
 //
 // Reads the viewed period directly from its LocalStorage source of truth
-<<<<<<< HEAD
 // (the same shared key initPeriod()/navigatePeriod() use) rather than a
 // cross-module variable, since bootstrap.js imports every page's module
 // on every page — a window-bound getter would get overwritten by
-=======
-// (the same `period_{page}` key initPeriod()/navigatePeriod() use) rather
-// than a cross-module variable, since bootstrap.js imports every page's
-// module on every page — a window-bound getter would get overwritten by
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 // whichever module was imported last, regardless of which page is active.
 export function getDefaultDateForPeriod() {
   const today = new Date();
   const todayStr = today.toLocaleDateString("en-CA");
   const todayPeriod = todayStr.substring(0, 7);
 
-<<<<<<< HEAD
   const viewedPeriod = getCurrentPeriod();
-=======
-  const page = getCurrentPage();
-  const viewedPeriod = localStorage.getItem(`period_${page}`);
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 
   if (!viewedPeriod || viewedPeriod === todayPeriod) {
     return todayStr;
@@ -477,25 +426,18 @@ window.parsePeriod = parsePeriod;
 window.getCurrentPage = getCurrentPage;
 window.periodDisplay = periodDisplay;
 window.fmt = fmt;
-<<<<<<< HEAD
 window.roundCurrency = roundCurrency;
 window.escapeHtml = escapeHtml;
 window.getCategoryLimitWarning = getCategoryLimitWarning;
 window.renderCategoryLimitWarning = renderCategoryLimitWarning;
 window.getCategoryBadgeColor = getCategoryBadgeColor;
-=======
-window.escapeHtml = escapeHtml;
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 window.getGreeting = getGreeting;
 window.updateGreeting = updateGreeting;
 window.renderMonthlySummaryUtils = renderMonthlySummaryUtils;
 window.initPeriod = initPeriod;
 window.navigatePeriod = navigatePeriod;
-<<<<<<< HEAD
 window.getCurrentPeriod = getCurrentPeriod;
 window.setCurrentPeriod = setCurrentPeriod;
-=======
->>>>>>> f46d71631115c637724f5b7b342a2629e1f1d80d
 window.populateExpenseCategoryDropdown = populateExpenseCategoryDropdown;
 window.populateIncomeCategoryDropdown = populateIncomeCategoryDropdown;
 window.getUnifiedCategories = getUnifiedCategories;
