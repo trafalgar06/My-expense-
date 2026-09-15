@@ -77,7 +77,22 @@ export function fmt(n) {
   const currency = (window.store && window.store.settings && window.store.settings.currency) || "INR";
   const locale = currency === "INR" ? "en-IN" : "en-US";
 
-  return Number(n || 0).toLocaleString(locale, {
+  let value = Number(n || 0);
+
+  // Snap anything under half the smallest displayed unit (a paisa/cent)
+  // to a clean positive zero before formatting. `n || 0` only catches an
+  // exact -0 — but Intl's currency formatter does NOT collapse a real
+  // near-zero negative (e.g. -0.0000000002, the kind of residue ordinary
+  // binary floating-point math leaves behind after enough additions and
+  // subtractions) the way roundCurrency's Math.round does. It renders it
+  // as "-₹0.00": a balance that reads as "less than zero rupees" while
+  // every visible digit is 0, which reasonably looks broken to whoever's
+  // looking at their own account balance.
+  if (Math.abs(value) < 0.005) {
+    value = 0;
+  }
+
+  return value.toLocaleString(locale, {
     style: "currency",
     currency: currency
   });

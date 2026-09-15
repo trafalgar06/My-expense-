@@ -245,7 +245,12 @@ function migrateToAccountsSchema() {
 
 export function getAccountBalance(accountKey) {
   if (!window.store.accounts || !window.store.accounts[accountKey]) return 0;
-  return window.store.accounts[accountKey].balance;
+  // roundCurrency() already runs on every write, but this account balance
+  // may hold a value written before that safeguard existed (or by some
+  // future path that forgets to round) — rounding again on read is cheap
+  // and makes the stored value self-correcting either way, rather than
+  // only ever fixing what's shown on screen via fmt().
+  return roundCurrency(window.store.accounts[accountKey].balance);
 }
 
 export function adjustAccountBalance(accountKey, delta) {

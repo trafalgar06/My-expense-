@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v18';
+const CACHE_VERSION = 'v19';
 const CACHE_NAME = 'denarotrack-' + CACHE_VERSION;
 // Relative to the service worker's own location, not the domain root —
 // see the matching fix in bootstrap.js's register() call. Absolute paths
