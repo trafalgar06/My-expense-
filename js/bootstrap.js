@@ -77,7 +77,14 @@ if ('serviceWorker' in navigator) {
       });
     }
   } else {
-    navigator.serviceWorker.register('/sw.js')
+    // Relative, not '/sw.js'. An absolute root path only resolves
+    // correctly when the site is served from its domain's root. If it's
+    // ever hosted under a subpath (e.g. a GitHub Pages project site at
+    // username.github.io/My-expense-/), '/sw.js' 404s against the domain
+    // root instead of the app's own folder, registration silently fails,
+    // and the app never gets offline/PWA support — with no visible error
+    // to the user beyond a console warning.
+    navigator.serviceWorker.register('sw.js')
       .then(reg => console.log('SW registered:', reg.scope))
       .catch(err => console.error('SW registration failed:', err));
   }

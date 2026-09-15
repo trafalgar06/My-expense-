@@ -2983,7 +2983,7 @@ input:disabled+.slider {
 .app-shell {
   max-width: var(--shell-max-width);
   margin: 0 auto;
-  padding: 0 var(--space-4) calc(var(--bottom-nav-height) + var(--space-8));
+  padding: 0 var(--space-4) calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) + var(--space-8));
   min-height: 100vh;
 }
 
@@ -3309,6 +3309,13 @@ input:disabled+.slider {
   background: var(--bg-primary);
   border-top: 1px solid var(--border-primary);
   box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+  /* With viewport-fit=cover, content is allowed to extend under the
+     home-indicator / gesture-bar area on notched phones. Without this,
+     the bottom row of nav items would sit partly behind that area —
+     on some phones/browsers still tappable but visually cramped or
+     partly hidden, which is exactly what "I can't see the bottom bar"
+     looks like. env() falls back to 0px on phones without a safe area. */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .bottom-nav-inner {
