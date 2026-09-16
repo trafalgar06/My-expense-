@@ -2307,16 +2307,20 @@ select:focus {
     gap: var(--space-3);
   }
 
-  .expense-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
-  }
-
-  .expense-actions {
-    width: 100%;
-    justify-content: space-between;
-  }
+  /* .expense-item used to be a wide desktop row that genuinely needed to
+     stack vertically on a narrow phone screen. It was redesigned since
+     into a compact always-horizontal row (icon+name on the left, amount+
+     action on the right, using flex:1/min-width:0 on the left side and
+     flex-shrink:0 on the right so it never needs to wrap) — but this
+     leftover rule kept forcing flex-direction:column at exactly phone
+     widths (max-width: 480px) anyway. Combined with .expense-item's
+     overflow:hidden, that pushed the amount and edit/delete button below
+     the visible row and clipped them off entirely — visible only as a
+     stray sliver peeking out the bottom of every transaction row. It
+     only ever displayed correctly once the screen crossed back over
+     480px, e.g. by rotating to landscape, which is the exact symptom
+     this was causing. The compact row layout doesn't need a column
+     fallback, so this override is removed rather than adjusted. */
 
   .modal-content {
     margin: var(--space-3);
@@ -3256,7 +3260,13 @@ input:disabled+.slider {
   font-size: 1.1rem;
 }
 
-.expense-details .text-body.font-medium {
+/* Dashboard's Recent Transactions rows are the same shape as the
+   Transactions page rows but built with .recent-transaction-info instead
+   of .expense-details (a naming split from an earlier incremental
+   redesign) — shared here so both get the same wrapping/truncation
+   behavior instead of the dashboard copy silently missing it. */
+.expense-details .text-body.font-medium,
+.recent-transaction-info .text-body.font-medium {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -3264,7 +3274,8 @@ input:disabled+.slider {
   font-weight: 600;
 }
 
-.expense-details .tx-name-row {
+.expense-details .tx-name-row,
+.recent-transaction-info .tx-name-row {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -3274,7 +3285,8 @@ input:disabled+.slider {
    an eyebrow label — override .text-caption's uppercase/letter-spacing/
    bold-inheritance here specifically, since those are meant for section
    labels elsewhere, not for dense list rows repeated dozens of times. */
-.expense-details .text-body.font-medium .text-caption {
+.expense-details .text-body.font-medium .text-caption,
+.recent-transaction-info .text-body.font-medium .text-caption {
   text-transform: none;
   letter-spacing: normal;
   font-weight: 400;
