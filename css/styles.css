@@ -1739,6 +1739,34 @@ select:focus {
 .category-limit-input-wrap {
   width: 140px;
   max-width: 100%;
+  /* Without this, flexbox treated the input as the flexible one and the
+     delete button (see .category-delete-btn below) as the fixed one —
+     backwards from what's needed. A category name can safely truncate
+     with an ellipsis (see .category-limit-row .setting-label above),
+     but a shrunk currency input just silently loses its "No limit"
+     placeholder, which is far more confusing to look at. */
+  flex-shrink: 0;
+}
+
+.category-delete-btn {
+  /* This used to be a regular .btn-danger.btn-sm with only padding
+     trimmed inline — but the base .btn class's padding (sized for a
+     button with a text label) made a single-glyph icon button over
+     100px wide regardless, with default flex-shrink:1 fighting the
+     currency input for space in a row that's only ~180px wide on a
+     phone. It's an icon-only action; sizing it like one (fixed, small,
+     square, and immovable) is what actually fixes that fight — not
+     tuning the shrink priority of an ever-changing set of two flex
+     items. */
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
 }
 
 @media (max-width: 767px) {
@@ -2931,13 +2959,24 @@ input:disabled+.slider {
   }
 
   .setting-item select,
-  .setting-item button,
+  .setting-item button:not(.category-delete-btn),
   .setting-item .input-field,
   .setting-item .setting-item-link,
   .setting-item .audit-toggle-group {
     width: 100% !important;
     max-width: 100% !important;
   }
+
+  /* .category-delete-btn is a fixed-size 44x44 icon button by design
+     (see its own rule, above) — the blanket rule directly above exists
+     for actually-full-width controls (selects, the audit toggle group, a
+     lone action button) and predates the compact category-limit row.
+     Without this exclusion, its !important width:100% still reached this
+     button through the plain ".setting-item button" descendant selector
+     even after the button's own class was corrected to match its
+     intended CSS — it stretched to 100% of its flex container, which
+     (since the container sizes around its children) inflated the whole
+     row and pushed it out from under the currency input next to it. */
 
   .setting-item .switch {
     align-self: center;
@@ -3391,6 +3430,34 @@ input:disabled+.slider {
   font-weight: 600;
   color: var(--text-tertiary);
   padding: 0 var(--space-1) var(--space-2);
+}
+
+/* The emoji picker's trigger sits in a 120px-wide column, but the
+   emoji-picker-element web component renders at its own fixed default
+   size (350px x 450px) regardless of that column's width. Anchoring it
+   with position:absolute to that column (as it was previously) meant
+   `right: 0` grew the picker 350px to the LEFT of a 120px-wide box — on
+   a typical ~390px-wide phone screen that ran it as much as 185px off
+   the left edge of the viewport, showing only a sliver of it. Anchoring
+   to the viewport instead, centered and capped to 90% of the screen
+   width, keeps it fully visible and centered regardless of where its
+   trigger happens to sit in the layout. */
+.emoji-picker-container {
+  position: fixed;
+  left: 50%;
+  bottom: 90px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: min(320px, 90vw);
+  max-height: 70vh;
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.emoji-picker-container emoji-picker {
+  width: 100%;
+  height: min(400px, 60vh);
 }
 
 .settings-group-card {

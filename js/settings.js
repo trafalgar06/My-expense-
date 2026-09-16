@@ -357,7 +357,7 @@ function renderCategorySettings() {
           <span class="currency-symbol">${getCurrencySymbol()}</span>
           <input type="number" class="input-field category-limit-input" data-category="${escapeHtml(cat)}" value="${limitVal}" placeholder="No limit">
         </div>
-        ${isCustom ? `<button class="btn btn-danger btn-sm delete-cat-btn" data-category="${escapeHtml(cat)}" style="padding: 6px 10px; min-width: auto; height: 42px;">🗑️</button>` : ''}
+        ${isCustom ? `<button class="btn btn-danger btn-sm category-delete-btn" data-category="${escapeHtml(cat)}">🗑️</button>` : ''}
       </div>
     `;
 
@@ -378,7 +378,7 @@ function renderCategorySettings() {
     });
   });
 
-  limitsList.querySelectorAll(".delete-cat-btn").forEach(btn => {
+  limitsList.querySelectorAll(".category-delete-btn").forEach(btn => {
     btn.addEventListener("click", function() {
       const cat = this.getAttribute("data-category");
       if (confirm(`Are you sure you want to delete custom category "${cat}"?`)) {
